@@ -14,7 +14,7 @@ Upon refreshing the HTML page in your browser, you will see different outer arc 
 
 ## sample output 
 
-![Demo](assets/demo.mp4)
+![Demo](assets/demo.gif)
 
 
 
