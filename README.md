@@ -1,6 +1,6 @@
 # d3-arcs
 
-I modified the code to create 2 concentric arcs with differring thickness aka outer radius
+Simple program to create 2 concentric arcs with differring thickness (aka outer radius)
 Upon refreshing the HTML page in your browser, you will see different outer arc with varying radii
 
 ## sources: 
@@ -14,7 +14,7 @@ Upon refreshing the HTML page in your browser, you will see different outer arc 
 
 ## sample output 
 
-![Demo](assets/demo.mp4)
+![Demo](assets/demo.gif)
 
 
 
