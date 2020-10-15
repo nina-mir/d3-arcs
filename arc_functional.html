@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <title>Arc generator (using accessors)</title>
+</head>
+
+<style>
+
+svg {
+    border: 1px dotted steelblue;
+}
+path {
+	fill: orange;
+	stroke: white;
+}
+</style>
+
+<body>
+  <svg width="1000" height="700">
+  	<g transform="translate(500, 350)"></g>
+  </svg>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  <script>
+
+// Random number generator from MDN Mozilla tutorial on JS
+// URL : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random  
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+    }
+    
+    function arcGenerator_fcn(inner, outer, start, end) {
+        return d3.arc()
+            .innerRadius(inner)
+            .outerRadius(outer)
+            .startAngle(start)
+            .endAngle(end);
+    }
+
+// Sample data 
+    var arcData = [
+        {startAngleOfMyArc: 0, endAngleOfMyArc: 0.2},
+        {startAngleOfMyArc: 0.2, endAngleOfMyArc: 0.6},
+        {startAngleOfMyArc: 0.6, endAngleOfMyArc: 1.4},
+        {startAngleOfMyArc: 1.4, endAngleOfMyArc: 3},
+        {startAngleOfMyArc: 3, endAngleOfMyArc: 2* Math.PI}
+    ];
+
+// Create a path element and set its d attribute
+    var data = d3.select('g')
+        .selectAll('path')
+        .data(arcData);
+
+    data.enter()
+        .append('path')
+        .attr('d', arcGenerator_fcn(90, 100, 
+            d => d.startAngleOfMyArc,
+            d => d.endAngleOfMyArc)
+        );
+
+    // Create and append the second outer arc in black
+    data.enter()
+        .append('g')
+        .append('path')
+        .style('fill', "black")
+        .attr('d', 
+        arcGenerator_fcn(
+            105, 
+            d => getRandomIntInclusive(110, 115),
+            d => d.startAngleOfMyArc, 
+            d => d.endAngleOfMyArc)
+        );
+  </script>
+</body>
+</html>
