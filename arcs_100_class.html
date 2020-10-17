@@ -11,7 +11,7 @@ svg {
 }
 path {
 	fill: orange;
-	stroke: white;
+	/* stroke: white; */
 }
 </style>
 
@@ -26,35 +26,22 @@ path {
 // Random number generator from MDN Mozilla tutorial on JS
 // URL : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random  
     function getRandomIntInclusive(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
-        }
-
-
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+    }
 // Create an arc generator with configuration and accessor functions
-    var arcGenerator = d3.arc()
-        .innerRadius(90)
-        .outerRadius(100)
-        .startAngle(function(d) {	
-            return d.startAngleOfMyArc;
-        })
-        .endAngle(function(d) {
-            return d.endAngleOfMyArc;
-        });
 
-// Create a 2nd arc generator with configuration and accessor functions
-    var arcGenerator_1 = d3.arc()
-        .innerRadius(120)
-        .outerRadius(function(d){
-            return getRandomIntInclusive(125, 130);
-        })
-        .startAngle(function(d) {	
-            return d.startAngleOfMyArc;
-        })
-        .endAngle(function(d) {
-            return d.endAngleOfMyArc;
-        });
+    function arcGenerator_fcn(inner, outer, start, end) {
+      return d3.arc()
+          .innerRadius(inner)
+          .outerRadius(outer)
+          .startAngle(start)
+          .endAngle(end)
+          .padAngle(0.00001)
+          .padRadius(0.000);
+    }
+
 // Sample data 
     var arcData = [
   {
@@ -465,19 +452,44 @@ path {
 
 // Create a path element and set its d attribute
     var data = d3.select('g')
-        .selectAll('path')
-        .data(arcData);
+            .selectAll('path')
+            .data(arcData);
 
     data.enter()
         .append('path')
-        .attr('d', arcGenerator);
+        .attr('d', arcGenerator_fcn(90, 100, 
+            d => d.startAngleOfMyArc,
+            d => d.endAngleOfMyArc)
+        );
 
     // Create and append the second outer arc in black
     data.enter()
         .append('g')
         .append('path')
         .style('fill', "black")
-        .attr('d', arcGenerator_1);
+        .attr('d', 
+        arcGenerator_fcn(
+            105, 
+            d => getRandomIntInclusive(1, 5)*2 + 105,
+            d => d.startAngleOfMyArc, 
+            d => d.endAngleOfMyArc)
+        );
+
+    for (let i = 1; i < 6; i++) {
+        // Create and append the multiple outer arcs
+        let inner_rad = 105 + 10*i + 5*i 
+        data.enter()
+            .append('g')
+            .append('path')
+            .style('fill', "black")
+            .attr('d', 
+            arcGenerator_fcn(
+                inner_rad, 
+                d => getRandomIntInclusive(1, 5)*2 + inner_rad,
+                d => d.startAngleOfMyArc, 
+                d => d.endAngleOfMyArc)
+            );        
+    }
   </script>
 </body>
 </html>

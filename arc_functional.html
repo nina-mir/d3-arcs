@@ -11,7 +11,9 @@ svg {
 }
 path {
 	fill: orange;
-	stroke: white;
+    /* if stroke is set to null the boundary between arc path elements will vanish.
+    Enable a valid corlor value for stroke attribute to render boundaries between arc path elements */
+	/* stroke: white; */ 
 }
 </style>
 
@@ -36,7 +38,9 @@ path {
             .innerRadius(inner)
             .outerRadius(outer)
             .startAngle(start)
-            .endAngle(end);
+            .endAngle(end)
+            .padAngle(0.00001)
+            .padRadius(0.000);
     }
 
 // Sample data 
@@ -72,6 +76,24 @@ path {
             d => d.startAngleOfMyArc, 
             d => d.endAngleOfMyArc)
         );
+
+    for (let i = 1; i < 6; i++) {
+        // Create and append the multiple outer arcs
+        let inner_rad = 105 + 10*i + 5*i 
+        data.enter()
+            .append('g')
+            .append('path')
+            .style('fill', "black")
+            .attr('d', 
+            arcGenerator_fcn(
+                inner_rad, 
+                d => getRandomIntInclusive(1, 5)*2 + inner_rad,
+                d => d.startAngleOfMyArc, 
+                d => d.endAngleOfMyArc)
+            );        
+    }
+
+    
   </script>
 </body>
 </html>
