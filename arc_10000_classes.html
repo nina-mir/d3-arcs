@@ -1,0 +1,3100 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <title>Arc generator (using accessors)</title>
+</head>
+
+<style>
+
+svg {
+    border: 1px dotted steelblue;
+}
+path {
+	fill: orange;
+	/* stroke: white; */
+}
+</style>
+
+<body>
+  <svg width="1000" height="700">
+  	<g transform="translate(500, 350)"></g>
+  </svg>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  <script>
+
+  color = ['e5be9e','b2945b','cbc0ad','86a397','361d2e','1a090d',
+           '348aa7', '8de969' ,'443850', '984447' ,'a5668b','6cd4ff','087e8b','d0b8ac','ebebeb']
+
+  // Option 1: give 2 color names
+  // source https://www.d3-graph-gallery.com/graph/custom_color.html
+var myColor = d3.scaleLinear().domain([1,20]).range(["black", "blue"])
+
+
+// Random number generator from MDN Mozilla tutorial on JS
+// URL : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random  
+    function getRandomIntInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+    }
+// Create an arc generator with configuration and accessor functions
+
+    function arcGenerator_fcn(inner, outer, start, end) {
+      return d3.arc()
+          .innerRadius(inner)
+          .outerRadius(outer)
+          .startAngle(start)
+          .endAngle(end)
+          .padAngle(0.00001)
+          .padRadius(0.000);
+    }
+
+// Sample data 
+    var arcData = [
+    {
+      "startAngleOfMyArc": 0,
+      "endAngleOfMyArc": 0.006283185307179587
+},{
+      "startAngleOfMyArc": 0.006283185307179587,
+      "endAngleOfMyArc": 0.012566370614359173
+},{
+      "startAngleOfMyArc": 0.012566370614359173,
+      "endAngleOfMyArc": 0.01884955592153876
+},{
+      "startAngleOfMyArc": 0.01884955592153876,
+      "endAngleOfMyArc": 0.025132741228718346
+},{
+      "startAngleOfMyArc": 0.025132741228718346,
+      "endAngleOfMyArc": 0.031415926535897934
+},{
+      "startAngleOfMyArc": 0.031415926535897934,
+      "endAngleOfMyArc": 0.03769911184307752
+},{
+      "startAngleOfMyArc": 0.03769911184307752,
+      "endAngleOfMyArc": 0.0439822971502571
+},{
+      "startAngleOfMyArc": 0.0439822971502571,
+      "endAngleOfMyArc": 0.050265482457436686
+},{
+      "startAngleOfMyArc": 0.050265482457436686,
+      "endAngleOfMyArc": 0.05654866776461627
+},{
+      "startAngleOfMyArc": 0.05654866776461627,
+      "endAngleOfMyArc": 0.06283185307179585
+},{
+      "startAngleOfMyArc": 0.06283185307179585,
+      "endAngleOfMyArc": 0.06911503837897544
+},{
+      "startAngleOfMyArc": 0.06911503837897544,
+      "endAngleOfMyArc": 0.07539822368615502
+},{
+      "startAngleOfMyArc": 0.07539822368615502,
+      "endAngleOfMyArc": 0.0816814089933346
+},{
+      "startAngleOfMyArc": 0.0816814089933346,
+      "endAngleOfMyArc": 0.08796459430051419
+},{
+      "startAngleOfMyArc": 0.08796459430051419,
+      "endAngleOfMyArc": 0.09424777960769377
+},{
+      "startAngleOfMyArc": 0.09424777960769377,
+      "endAngleOfMyArc": 0.10053096491487336
+},{
+      "startAngleOfMyArc": 0.10053096491487336,
+      "endAngleOfMyArc": 0.10681415022205294
+},{
+      "startAngleOfMyArc": 0.10681415022205294,
+      "endAngleOfMyArc": 0.11309733552923253
+},{
+      "startAngleOfMyArc": 0.11309733552923253,
+      "endAngleOfMyArc": 0.11938052083641211
+},{
+      "startAngleOfMyArc": 0.11938052083641211,
+      "endAngleOfMyArc": 0.1256637061435917
+},{
+      "startAngleOfMyArc": 0.1256637061435917,
+      "endAngleOfMyArc": 0.1319468914507713
+},{
+      "startAngleOfMyArc": 0.1319468914507713,
+      "endAngleOfMyArc": 0.13823007675795088
+},{
+      "startAngleOfMyArc": 0.13823007675795088,
+      "endAngleOfMyArc": 0.14451326206513046
+},{
+      "startAngleOfMyArc": 0.14451326206513046,
+      "endAngleOfMyArc": 0.15079644737231004
+},{
+      "startAngleOfMyArc": 0.15079644737231004,
+      "endAngleOfMyArc": 0.15707963267948963
+},{
+      "startAngleOfMyArc": 0.15707963267948963,
+      "endAngleOfMyArc": 0.1633628179866692
+},{
+      "startAngleOfMyArc": 0.1633628179866692,
+      "endAngleOfMyArc": 0.1696460032938488
+},{
+      "startAngleOfMyArc": 0.1696460032938488,
+      "endAngleOfMyArc": 0.17592918860102838
+},{
+      "startAngleOfMyArc": 0.17592918860102838,
+      "endAngleOfMyArc": 0.18221237390820796
+},{
+      "startAngleOfMyArc": 0.18221237390820796,
+      "endAngleOfMyArc": 0.18849555921538755
+},{
+      "startAngleOfMyArc": 0.18849555921538755,
+      "endAngleOfMyArc": 0.19477874452256713
+},{
+      "startAngleOfMyArc": 0.19477874452256713,
+      "endAngleOfMyArc": 0.20106192982974672
+},{
+      "startAngleOfMyArc": 0.20106192982974672,
+      "endAngleOfMyArc": 0.2073451151369263
+},{
+      "startAngleOfMyArc": 0.2073451151369263,
+      "endAngleOfMyArc": 0.21362830044410588
+},{
+      "startAngleOfMyArc": 0.21362830044410588,
+      "endAngleOfMyArc": 0.21991148575128547
+},{
+      "startAngleOfMyArc": 0.21991148575128547,
+      "endAngleOfMyArc": 0.22619467105846505
+},{
+      "startAngleOfMyArc": 0.22619467105846505,
+      "endAngleOfMyArc": 0.23247785636564464
+},{
+      "startAngleOfMyArc": 0.23247785636564464,
+      "endAngleOfMyArc": 0.23876104167282422
+},{
+      "startAngleOfMyArc": 0.23876104167282422,
+      "endAngleOfMyArc": 0.2450442269800038
+},{
+      "startAngleOfMyArc": 0.2450442269800038,
+      "endAngleOfMyArc": 0.2513274122871834
+},{
+      "startAngleOfMyArc": 0.2513274122871834,
+      "endAngleOfMyArc": 0.257610597594363
+},{
+      "startAngleOfMyArc": 0.257610597594363,
+      "endAngleOfMyArc": 0.2638937829015426
+},{
+      "startAngleOfMyArc": 0.2638937829015426,
+      "endAngleOfMyArc": 0.27017696820872217
+},{
+      "startAngleOfMyArc": 0.27017696820872217,
+      "endAngleOfMyArc": 0.27646015351590175
+},{
+      "startAngleOfMyArc": 0.27646015351590175,
+      "endAngleOfMyArc": 0.28274333882308134
+},{
+      "startAngleOfMyArc": 0.28274333882308134,
+      "endAngleOfMyArc": 0.2890265241302609
+},{
+      "startAngleOfMyArc": 0.2890265241302609,
+      "endAngleOfMyArc": 0.2953097094374405
+},{
+      "startAngleOfMyArc": 0.2953097094374405,
+      "endAngleOfMyArc": 0.3015928947446201
+},{
+      "startAngleOfMyArc": 0.3015928947446201,
+      "endAngleOfMyArc": 0.30787608005179967
+},{
+      "startAngleOfMyArc": 0.30787608005179967,
+      "endAngleOfMyArc": 0.31415926535897926
+},{
+      "startAngleOfMyArc": 0.31415926535897926,
+      "endAngleOfMyArc": 0.32044245066615884
+},{
+      "startAngleOfMyArc": 0.32044245066615884,
+      "endAngleOfMyArc": 0.3267256359733384
+},{
+      "startAngleOfMyArc": 0.3267256359733384,
+      "endAngleOfMyArc": 0.333008821280518
+},{
+      "startAngleOfMyArc": 0.333008821280518,
+      "endAngleOfMyArc": 0.3392920065876976
+},{
+      "startAngleOfMyArc": 0.3392920065876976,
+      "endAngleOfMyArc": 0.3455751918948772
+},{
+      "startAngleOfMyArc": 0.3455751918948772,
+      "endAngleOfMyArc": 0.35185837720205676
+},{
+      "startAngleOfMyArc": 0.35185837720205676,
+      "endAngleOfMyArc": 0.35814156250923634
+},{
+      "startAngleOfMyArc": 0.35814156250923634,
+      "endAngleOfMyArc": 0.36442474781641593
+},{
+      "startAngleOfMyArc": 0.36442474781641593,
+      "endAngleOfMyArc": 0.3707079331235955
+},{
+      "startAngleOfMyArc": 0.3707079331235955,
+      "endAngleOfMyArc": 0.3769911184307751
+},{
+      "startAngleOfMyArc": 0.3769911184307751,
+      "endAngleOfMyArc": 0.3832743037379547
+},{
+      "startAngleOfMyArc": 0.3832743037379547,
+      "endAngleOfMyArc": 0.38955748904513426
+},{
+      "startAngleOfMyArc": 0.38955748904513426,
+      "endAngleOfMyArc": 0.39584067435231385
+},{
+      "startAngleOfMyArc": 0.39584067435231385,
+      "endAngleOfMyArc": 0.40212385965949343
+},{
+      "startAngleOfMyArc": 0.40212385965949343,
+      "endAngleOfMyArc": 0.408407044966673
+},{
+      "startAngleOfMyArc": 0.408407044966673,
+      "endAngleOfMyArc": 0.4146902302738526
+},{
+      "startAngleOfMyArc": 0.4146902302738526,
+      "endAngleOfMyArc": 0.4209734155810322
+},{
+      "startAngleOfMyArc": 0.4209734155810322,
+      "endAngleOfMyArc": 0.42725660088821177
+},{
+      "startAngleOfMyArc": 0.42725660088821177,
+      "endAngleOfMyArc": 0.43353978619539135
+},{
+      "startAngleOfMyArc": 0.43353978619539135,
+      "endAngleOfMyArc": 0.43982297150257094
+},{
+      "startAngleOfMyArc": 0.43982297150257094,
+      "endAngleOfMyArc": 0.4461061568097505
+},{
+      "startAngleOfMyArc": 0.4461061568097505,
+      "endAngleOfMyArc": 0.4523893421169301
+},{
+      "startAngleOfMyArc": 0.4523893421169301,
+      "endAngleOfMyArc": 0.4586725274241097
+},{
+      "startAngleOfMyArc": 0.4586725274241097,
+      "endAngleOfMyArc": 0.4649557127312893
+},{
+      "startAngleOfMyArc": 0.4649557127312893,
+      "endAngleOfMyArc": 0.47123889803846886
+},{
+      "startAngleOfMyArc": 0.47123889803846886,
+      "endAngleOfMyArc": 0.47752208334564844
+},{
+      "startAngleOfMyArc": 0.47752208334564844,
+      "endAngleOfMyArc": 0.483805268652828
+},{
+      "startAngleOfMyArc": 0.483805268652828,
+      "endAngleOfMyArc": 0.4900884539600076
+},{
+      "startAngleOfMyArc": 0.4900884539600076,
+      "endAngleOfMyArc": 0.4963716392671872
+},{
+      "startAngleOfMyArc": 0.4963716392671872,
+      "endAngleOfMyArc": 0.5026548245743668
+},{
+      "startAngleOfMyArc": 0.5026548245743668,
+      "endAngleOfMyArc": 0.5089380098815465
+},{
+      "startAngleOfMyArc": 0.5089380098815465,
+      "endAngleOfMyArc": 0.5152211951887261
+},{
+      "startAngleOfMyArc": 0.5152211951887261,
+      "endAngleOfMyArc": 0.5215043804959058
+},{
+      "startAngleOfMyArc": 0.5215043804959058,
+      "endAngleOfMyArc": 0.5277875658030854
+},{
+      "startAngleOfMyArc": 0.5277875658030854,
+      "endAngleOfMyArc": 0.534070751110265
+},{
+      "startAngleOfMyArc": 0.534070751110265,
+      "endAngleOfMyArc": 0.5403539364174447
+},{
+      "startAngleOfMyArc": 0.5403539364174447,
+      "endAngleOfMyArc": 0.5466371217246243
+},{
+      "startAngleOfMyArc": 0.5466371217246243,
+      "endAngleOfMyArc": 0.552920307031804
+},{
+      "startAngleOfMyArc": 0.552920307031804,
+      "endAngleOfMyArc": 0.5592034923389836
+},{
+      "startAngleOfMyArc": 0.5592034923389836,
+      "endAngleOfMyArc": 0.5654866776461632
+},{
+      "startAngleOfMyArc": 0.5654866776461632,
+      "endAngleOfMyArc": 0.5717698629533429
+},{
+      "startAngleOfMyArc": 0.5717698629533429,
+      "endAngleOfMyArc": 0.5780530482605225
+},{
+      "startAngleOfMyArc": 0.5780530482605225,
+      "endAngleOfMyArc": 0.5843362335677021
+},{
+      "startAngleOfMyArc": 0.5843362335677021,
+      "endAngleOfMyArc": 0.5906194188748818
+},{
+      "startAngleOfMyArc": 0.5906194188748818,
+      "endAngleOfMyArc": 0.5969026041820614
+},{
+      "startAngleOfMyArc": 0.5969026041820614,
+      "endAngleOfMyArc": 0.6031857894892411
+},{
+      "startAngleOfMyArc": 0.6031857894892411,
+      "endAngleOfMyArc": 0.6094689747964207
+},{
+      "startAngleOfMyArc": 0.6094689747964207,
+      "endAngleOfMyArc": 0.6157521601036003
+},{
+      "startAngleOfMyArc": 0.6157521601036003,
+      "endAngleOfMyArc": 0.62203534541078
+},{
+      "startAngleOfMyArc": 0.62203534541078,
+      "endAngleOfMyArc": 0.6283185307179596
+},{
+      "startAngleOfMyArc": 0.6283185307179596,
+      "endAngleOfMyArc": 0.6346017160251393
+},{
+      "startAngleOfMyArc": 0.6346017160251393,
+      "endAngleOfMyArc": 0.6408849013323189
+},{
+      "startAngleOfMyArc": 0.6408849013323189,
+      "endAngleOfMyArc": 0.6471680866394985
+},{
+      "startAngleOfMyArc": 0.6471680866394985,
+      "endAngleOfMyArc": 0.6534512719466782
+},{
+      "startAngleOfMyArc": 0.6534512719466782,
+      "endAngleOfMyArc": 0.6597344572538578
+},{
+      "startAngleOfMyArc": 0.6597344572538578,
+      "endAngleOfMyArc": 0.6660176425610375
+},{
+      "startAngleOfMyArc": 0.6660176425610375,
+      "endAngleOfMyArc": 0.6723008278682171
+},{
+      "startAngleOfMyArc": 0.6723008278682171,
+      "endAngleOfMyArc": 0.6785840131753967
+},{
+      "startAngleOfMyArc": 0.6785840131753967,
+      "endAngleOfMyArc": 0.6848671984825764
+},{
+      "startAngleOfMyArc": 0.6848671984825764,
+      "endAngleOfMyArc": 0.691150383789756
+},{
+      "startAngleOfMyArc": 0.691150383789756,
+      "endAngleOfMyArc": 0.6974335690969357
+},{
+      "startAngleOfMyArc": 0.6974335690969357,
+      "endAngleOfMyArc": 0.7037167544041153
+},{
+      "startAngleOfMyArc": 0.7037167544041153,
+      "endAngleOfMyArc": 0.7099999397112949
+},{
+      "startAngleOfMyArc": 0.7099999397112949,
+      "endAngleOfMyArc": 0.7162831250184746
+},{
+      "startAngleOfMyArc": 0.7162831250184746,
+      "endAngleOfMyArc": 0.7225663103256542
+},{
+      "startAngleOfMyArc": 0.7225663103256542,
+      "endAngleOfMyArc": 0.7288494956328339
+},{
+      "startAngleOfMyArc": 0.7288494956328339,
+      "endAngleOfMyArc": 0.7351326809400135
+},{
+      "startAngleOfMyArc": 0.7351326809400135,
+      "endAngleOfMyArc": 0.7414158662471931
+},{
+      "startAngleOfMyArc": 0.7414158662471931,
+      "endAngleOfMyArc": 0.7476990515543728
+},{
+      "startAngleOfMyArc": 0.7476990515543728,
+      "endAngleOfMyArc": 0.7539822368615524
+},{
+      "startAngleOfMyArc": 0.7539822368615524,
+      "endAngleOfMyArc": 0.760265422168732
+},{
+      "startAngleOfMyArc": 0.760265422168732,
+      "endAngleOfMyArc": 0.7665486074759117
+},{
+      "startAngleOfMyArc": 0.7665486074759117,
+      "endAngleOfMyArc": 0.7728317927830913
+},{
+      "startAngleOfMyArc": 0.7728317927830913,
+      "endAngleOfMyArc": 0.779114978090271
+},{
+      "startAngleOfMyArc": 0.779114978090271,
+      "endAngleOfMyArc": 0.7853981633974506
+},{
+      "startAngleOfMyArc": 0.7853981633974506,
+      "endAngleOfMyArc": 0.7916813487046302
+},{
+      "startAngleOfMyArc": 0.7916813487046302,
+      "endAngleOfMyArc": 0.7979645340118099
+},{
+      "startAngleOfMyArc": 0.7979645340118099,
+      "endAngleOfMyArc": 0.8042477193189895
+},{
+      "startAngleOfMyArc": 0.8042477193189895,
+      "endAngleOfMyArc": 0.8105309046261692
+},{
+      "startAngleOfMyArc": 0.8105309046261692,
+      "endAngleOfMyArc": 0.8168140899333488
+},{
+      "startAngleOfMyArc": 0.8168140899333488,
+      "endAngleOfMyArc": 0.8230972752405284
+},{
+      "startAngleOfMyArc": 0.8230972752405284,
+      "endAngleOfMyArc": 0.8293804605477081
+},{
+      "startAngleOfMyArc": 0.8293804605477081,
+      "endAngleOfMyArc": 0.8356636458548877
+},{
+      "startAngleOfMyArc": 0.8356636458548877,
+      "endAngleOfMyArc": 0.8419468311620674
+},{
+      "startAngleOfMyArc": 0.8419468311620674,
+      "endAngleOfMyArc": 0.848230016469247
+},{
+      "startAngleOfMyArc": 0.848230016469247,
+      "endAngleOfMyArc": 0.8545132017764266
+},{
+      "startAngleOfMyArc": 0.8545132017764266,
+      "endAngleOfMyArc": 0.8607963870836063
+},{
+      "startAngleOfMyArc": 0.8607963870836063,
+      "endAngleOfMyArc": 0.8670795723907859
+},{
+      "startAngleOfMyArc": 0.8670795723907859,
+      "endAngleOfMyArc": 0.8733627576979656
+},{
+      "startAngleOfMyArc": 0.8733627576979656,
+      "endAngleOfMyArc": 0.8796459430051452
+},{
+      "startAngleOfMyArc": 0.8796459430051452,
+      "endAngleOfMyArc": 0.8859291283123248
+},{
+      "startAngleOfMyArc": 0.8859291283123248,
+      "endAngleOfMyArc": 0.8922123136195045
+},{
+      "startAngleOfMyArc": 0.8922123136195045,
+      "endAngleOfMyArc": 0.8984954989266841
+},{
+      "startAngleOfMyArc": 0.8984954989266841,
+      "endAngleOfMyArc": 0.9047786842338638
+},{
+      "startAngleOfMyArc": 0.9047786842338638,
+      "endAngleOfMyArc": 0.9110618695410434
+},{
+      "startAngleOfMyArc": 0.9110618695410434,
+      "endAngleOfMyArc": 0.917345054848223
+},{
+      "startAngleOfMyArc": 0.917345054848223,
+      "endAngleOfMyArc": 0.9236282401554027
+},{
+      "startAngleOfMyArc": 0.9236282401554027,
+      "endAngleOfMyArc": 0.9299114254625823
+},{
+      "startAngleOfMyArc": 0.9299114254625823,
+      "endAngleOfMyArc": 0.936194610769762
+},{
+      "startAngleOfMyArc": 0.936194610769762,
+      "endAngleOfMyArc": 0.9424777960769416
+},{
+      "startAngleOfMyArc": 0.9424777960769416,
+      "endAngleOfMyArc": 0.9487609813841212
+},{
+      "startAngleOfMyArc": 0.9487609813841212,
+      "endAngleOfMyArc": 0.9550441666913009
+},{
+      "startAngleOfMyArc": 0.9550441666913009,
+      "endAngleOfMyArc": 0.9613273519984805
+},{
+      "startAngleOfMyArc": 0.9613273519984805,
+      "endAngleOfMyArc": 0.9676105373056602
+},{
+      "startAngleOfMyArc": 0.9676105373056602,
+      "endAngleOfMyArc": 0.9738937226128398
+},{
+      "startAngleOfMyArc": 0.9738937226128398,
+      "endAngleOfMyArc": 0.9801769079200194
+},{
+      "startAngleOfMyArc": 0.9801769079200194,
+      "endAngleOfMyArc": 0.9864600932271991
+},{
+      "startAngleOfMyArc": 0.9864600932271991,
+      "endAngleOfMyArc": 0.9927432785343787
+},{
+      "startAngleOfMyArc": 0.9927432785343787,
+      "endAngleOfMyArc": 0.9990264638415584
+},{
+      "startAngleOfMyArc": 0.9990264638415584,
+      "endAngleOfMyArc": 1.0053096491487379
+},{
+      "startAngleOfMyArc": 1.0053096491487379,
+      "endAngleOfMyArc": 1.0115928344559175
+},{
+      "startAngleOfMyArc": 1.0115928344559175,
+      "endAngleOfMyArc": 1.0178760197630972
+},{
+      "startAngleOfMyArc": 1.0178760197630972,
+      "endAngleOfMyArc": 1.0241592050702768
+},{
+      "startAngleOfMyArc": 1.0241592050702768,
+      "endAngleOfMyArc": 1.0304423903774564
+},{
+      "startAngleOfMyArc": 1.0304423903774564,
+      "endAngleOfMyArc": 1.036725575684636
+},{
+      "startAngleOfMyArc": 1.036725575684636,
+      "endAngleOfMyArc": 1.0430087609918157
+},{
+      "startAngleOfMyArc": 1.0430087609918157,
+      "endAngleOfMyArc": 1.0492919462989954
+},{
+      "startAngleOfMyArc": 1.0492919462989954,
+      "endAngleOfMyArc": 1.055575131606175
+},{
+      "startAngleOfMyArc": 1.055575131606175,
+      "endAngleOfMyArc": 1.0618583169133546
+},{
+      "startAngleOfMyArc": 1.0618583169133546,
+      "endAngleOfMyArc": 1.0681415022205343
+},{
+      "startAngleOfMyArc": 1.0681415022205343,
+      "endAngleOfMyArc": 1.074424687527714
+},{
+      "startAngleOfMyArc": 1.074424687527714,
+      "endAngleOfMyArc": 1.0807078728348936
+},{
+      "startAngleOfMyArc": 1.0807078728348936,
+      "endAngleOfMyArc": 1.0869910581420732
+},{
+      "startAngleOfMyArc": 1.0869910581420732,
+      "endAngleOfMyArc": 1.0932742434492528
+},{
+      "startAngleOfMyArc": 1.0932742434492528,
+      "endAngleOfMyArc": 1.0995574287564325
+},{
+      "startAngleOfMyArc": 1.0995574287564325,
+      "endAngleOfMyArc": 1.1058406140636121
+},{
+      "startAngleOfMyArc": 1.1058406140636121,
+      "endAngleOfMyArc": 1.1121237993707918
+},{
+      "startAngleOfMyArc": 1.1121237993707918,
+      "endAngleOfMyArc": 1.1184069846779714
+},{
+      "startAngleOfMyArc": 1.1184069846779714,
+      "endAngleOfMyArc": 1.124690169985151
+},{
+      "startAngleOfMyArc": 1.124690169985151,
+      "endAngleOfMyArc": 1.1309733552923307
+},{
+      "startAngleOfMyArc": 1.1309733552923307,
+      "endAngleOfMyArc": 1.1372565405995103
+},{
+      "startAngleOfMyArc": 1.1372565405995103,
+      "endAngleOfMyArc": 1.14353972590669
+},{
+      "startAngleOfMyArc": 1.14353972590669,
+      "endAngleOfMyArc": 1.1498229112138696
+},{
+      "startAngleOfMyArc": 1.1498229112138696,
+      "endAngleOfMyArc": 1.1561060965210492
+},{
+      "startAngleOfMyArc": 1.1561060965210492,
+      "endAngleOfMyArc": 1.1623892818282289
+},{
+      "startAngleOfMyArc": 1.1623892818282289,
+      "endAngleOfMyArc": 1.1686724671354085
+},{
+      "startAngleOfMyArc": 1.1686724671354085,
+      "endAngleOfMyArc": 1.1749556524425881
+},{
+      "startAngleOfMyArc": 1.1749556524425881,
+      "endAngleOfMyArc": 1.1812388377497678
+},{
+      "startAngleOfMyArc": 1.1812388377497678,
+      "endAngleOfMyArc": 1.1875220230569474
+},{
+      "startAngleOfMyArc": 1.1875220230569474,
+      "endAngleOfMyArc": 1.193805208364127
+},{
+      "startAngleOfMyArc": 1.193805208364127,
+      "endAngleOfMyArc": 1.2000883936713067
+},{
+      "startAngleOfMyArc": 1.2000883936713067,
+      "endAngleOfMyArc": 1.2063715789784863
+},{
+      "startAngleOfMyArc": 1.2063715789784863,
+      "endAngleOfMyArc": 1.212654764285666
+},{
+      "startAngleOfMyArc": 1.212654764285666,
+      "endAngleOfMyArc": 1.2189379495928456
+},{
+      "startAngleOfMyArc": 1.2189379495928456,
+      "endAngleOfMyArc": 1.2252211349000253
+},{
+      "startAngleOfMyArc": 1.2252211349000253,
+      "endAngleOfMyArc": 1.231504320207205
+},{
+      "startAngleOfMyArc": 1.231504320207205,
+      "endAngleOfMyArc": 1.2377875055143845
+},{
+      "startAngleOfMyArc": 1.2377875055143845,
+      "endAngleOfMyArc": 1.2440706908215642
+},{
+      "startAngleOfMyArc": 1.2440706908215642,
+      "endAngleOfMyArc": 1.2503538761287438
+},{
+      "startAngleOfMyArc": 1.2503538761287438,
+      "endAngleOfMyArc": 1.2566370614359235
+},{
+      "startAngleOfMyArc": 1.2566370614359235,
+      "endAngleOfMyArc": 1.262920246743103
+},{
+      "startAngleOfMyArc": 1.262920246743103,
+      "endAngleOfMyArc": 1.2692034320502827
+},{
+      "startAngleOfMyArc": 1.2692034320502827,
+      "endAngleOfMyArc": 1.2754866173574624
+},{
+      "startAngleOfMyArc": 1.2754866173574624,
+      "endAngleOfMyArc": 1.281769802664642
+},{
+      "startAngleOfMyArc": 1.281769802664642,
+      "endAngleOfMyArc": 1.2880529879718217
+},{
+      "startAngleOfMyArc": 1.2880529879718217,
+      "endAngleOfMyArc": 1.2943361732790013
+},{
+      "startAngleOfMyArc": 1.2943361732790013,
+      "endAngleOfMyArc": 1.300619358586181
+},{
+      "startAngleOfMyArc": 1.300619358586181,
+      "endAngleOfMyArc": 1.3069025438933606
+},{
+      "startAngleOfMyArc": 1.3069025438933606,
+      "endAngleOfMyArc": 1.3131857292005402
+},{
+      "startAngleOfMyArc": 1.3131857292005402,
+      "endAngleOfMyArc": 1.3194689145077199
+},{
+      "startAngleOfMyArc": 1.3194689145077199,
+      "endAngleOfMyArc": 1.3257520998148995
+},{
+      "startAngleOfMyArc": 1.3257520998148995,
+      "endAngleOfMyArc": 1.3320352851220791
+},{
+      "startAngleOfMyArc": 1.3320352851220791,
+      "endAngleOfMyArc": 1.3383184704292588
+},{
+      "startAngleOfMyArc": 1.3383184704292588,
+      "endAngleOfMyArc": 1.3446016557364384
+},{
+      "startAngleOfMyArc": 1.3446016557364384,
+      "endAngleOfMyArc": 1.350884841043618
+},{
+      "startAngleOfMyArc": 1.350884841043618,
+      "endAngleOfMyArc": 1.3571680263507977
+},{
+      "startAngleOfMyArc": 1.3571680263507977,
+      "endAngleOfMyArc": 1.3634512116579773
+},{
+      "startAngleOfMyArc": 1.3634512116579773,
+      "endAngleOfMyArc": 1.369734396965157
+},{
+      "startAngleOfMyArc": 1.369734396965157,
+      "endAngleOfMyArc": 1.3760175822723366
+},{
+      "startAngleOfMyArc": 1.3760175822723366,
+      "endAngleOfMyArc": 1.3823007675795163
+},{
+      "startAngleOfMyArc": 1.3823007675795163,
+      "endAngleOfMyArc": 1.388583952886696
+},{
+      "startAngleOfMyArc": 1.388583952886696,
+      "endAngleOfMyArc": 1.3948671381938755
+},{
+      "startAngleOfMyArc": 1.3948671381938755,
+      "endAngleOfMyArc": 1.4011503235010552
+},{
+      "startAngleOfMyArc": 1.4011503235010552,
+      "endAngleOfMyArc": 1.4074335088082348
+},{
+      "startAngleOfMyArc": 1.4074335088082348,
+      "endAngleOfMyArc": 1.4137166941154145
+},{
+      "startAngleOfMyArc": 1.4137166941154145,
+      "endAngleOfMyArc": 1.419999879422594
+},{
+      "startAngleOfMyArc": 1.419999879422594,
+      "endAngleOfMyArc": 1.4262830647297737
+},{
+      "startAngleOfMyArc": 1.4262830647297737,
+      "endAngleOfMyArc": 1.4325662500369534
+},{
+      "startAngleOfMyArc": 1.4325662500369534,
+      "endAngleOfMyArc": 1.438849435344133
+},{
+      "startAngleOfMyArc": 1.438849435344133,
+      "endAngleOfMyArc": 1.4451326206513126
+},{
+      "startAngleOfMyArc": 1.4451326206513126,
+      "endAngleOfMyArc": 1.4514158059584923
+},{
+      "startAngleOfMyArc": 1.4514158059584923,
+      "endAngleOfMyArc": 1.457698991265672
+},{
+      "startAngleOfMyArc": 1.457698991265672,
+      "endAngleOfMyArc": 1.4639821765728516
+},{
+      "startAngleOfMyArc": 1.4639821765728516,
+      "endAngleOfMyArc": 1.4702653618800312
+},{
+      "startAngleOfMyArc": 1.4702653618800312,
+      "endAngleOfMyArc": 1.4765485471872108
+},{
+      "startAngleOfMyArc": 1.4765485471872108,
+      "endAngleOfMyArc": 1.4828317324943905
+},{
+      "startAngleOfMyArc": 1.4828317324943905,
+      "endAngleOfMyArc": 1.4891149178015701
+},{
+      "startAngleOfMyArc": 1.4891149178015701,
+      "endAngleOfMyArc": 1.4953981031087498
+},{
+      "startAngleOfMyArc": 1.4953981031087498,
+      "endAngleOfMyArc": 1.5016812884159294
+},{
+      "startAngleOfMyArc": 1.5016812884159294,
+      "endAngleOfMyArc": 1.507964473723109
+},{
+      "startAngleOfMyArc": 1.507964473723109,
+      "endAngleOfMyArc": 1.5142476590302887
+},{
+      "startAngleOfMyArc": 1.5142476590302887,
+      "endAngleOfMyArc": 1.5205308443374683
+},{
+      "startAngleOfMyArc": 1.5205308443374683,
+      "endAngleOfMyArc": 1.526814029644648
+},{
+      "startAngleOfMyArc": 1.526814029644648,
+      "endAngleOfMyArc": 1.5330972149518276
+},{
+      "startAngleOfMyArc": 1.5330972149518276,
+      "endAngleOfMyArc": 1.5393804002590072
+},{
+      "startAngleOfMyArc": 1.5393804002590072,
+      "endAngleOfMyArc": 1.5456635855661869
+},{
+      "startAngleOfMyArc": 1.5456635855661869,
+      "endAngleOfMyArc": 1.5519467708733665
+},{
+      "startAngleOfMyArc": 1.5519467708733665,
+      "endAngleOfMyArc": 1.5582299561805462
+},{
+      "startAngleOfMyArc": 1.5582299561805462,
+      "endAngleOfMyArc": 1.5645131414877258
+},{
+      "startAngleOfMyArc": 1.5645131414877258,
+      "endAngleOfMyArc": 1.5707963267949054
+},{
+      "startAngleOfMyArc": 1.5707963267949054,
+      "endAngleOfMyArc": 1.577079512102085
+},{
+      "startAngleOfMyArc": 1.577079512102085,
+      "endAngleOfMyArc": 1.5833626974092647
+},{
+      "startAngleOfMyArc": 1.5833626974092647,
+      "endAngleOfMyArc": 1.5896458827164444
+},{
+      "startAngleOfMyArc": 1.5896458827164444,
+      "endAngleOfMyArc": 1.595929068023624
+},{
+      "startAngleOfMyArc": 1.595929068023624,
+      "endAngleOfMyArc": 1.6022122533308036
+},{
+      "startAngleOfMyArc": 1.6022122533308036,
+      "endAngleOfMyArc": 1.6084954386379833
+},{
+      "startAngleOfMyArc": 1.6084954386379833,
+      "endAngleOfMyArc": 1.614778623945163
+},{
+      "startAngleOfMyArc": 1.614778623945163,
+      "endAngleOfMyArc": 1.6210618092523426
+},{
+      "startAngleOfMyArc": 1.6210618092523426,
+      "endAngleOfMyArc": 1.6273449945595222
+},{
+      "startAngleOfMyArc": 1.6273449945595222,
+      "endAngleOfMyArc": 1.6336281798667018
+},{
+      "startAngleOfMyArc": 1.6336281798667018,
+      "endAngleOfMyArc": 1.6399113651738815
+},{
+      "startAngleOfMyArc": 1.6399113651738815,
+      "endAngleOfMyArc": 1.6461945504810611
+},{
+      "startAngleOfMyArc": 1.6461945504810611,
+      "endAngleOfMyArc": 1.6524777357882408
+},{
+      "startAngleOfMyArc": 1.6524777357882408,
+      "endAngleOfMyArc": 1.6587609210954204
+},{
+      "startAngleOfMyArc": 1.6587609210954204,
+      "endAngleOfMyArc": 1.6650441064026
+},{
+      "startAngleOfMyArc": 1.6650441064026,
+      "endAngleOfMyArc": 1.6713272917097797
+},{
+      "startAngleOfMyArc": 1.6713272917097797,
+      "endAngleOfMyArc": 1.6776104770169593
+},{
+      "startAngleOfMyArc": 1.6776104770169593,
+      "endAngleOfMyArc": 1.683893662324139
+},{
+      "startAngleOfMyArc": 1.683893662324139,
+      "endAngleOfMyArc": 1.6901768476313186
+},{
+      "startAngleOfMyArc": 1.6901768476313186,
+      "endAngleOfMyArc": 1.6964600329384982
+},{
+      "startAngleOfMyArc": 1.6964600329384982,
+      "endAngleOfMyArc": 1.7027432182456779
+},{
+      "startAngleOfMyArc": 1.7027432182456779,
+      "endAngleOfMyArc": 1.7090264035528575
+},{
+      "startAngleOfMyArc": 1.7090264035528575,
+      "endAngleOfMyArc": 1.7153095888600371
+},{
+      "startAngleOfMyArc": 1.7153095888600371,
+      "endAngleOfMyArc": 1.7215927741672168
+},{
+      "startAngleOfMyArc": 1.7215927741672168,
+      "endAngleOfMyArc": 1.7278759594743964
+},{
+      "startAngleOfMyArc": 1.7278759594743964,
+      "endAngleOfMyArc": 1.734159144781576
+},{
+      "startAngleOfMyArc": 1.734159144781576,
+      "endAngleOfMyArc": 1.7404423300887557
+},{
+      "startAngleOfMyArc": 1.7404423300887557,
+      "endAngleOfMyArc": 1.7467255153959353
+},{
+      "startAngleOfMyArc": 1.7467255153959353,
+      "endAngleOfMyArc": 1.753008700703115
+},{
+      "startAngleOfMyArc": 1.753008700703115,
+      "endAngleOfMyArc": 1.7592918860102946
+},{
+      "startAngleOfMyArc": 1.7592918860102946,
+      "endAngleOfMyArc": 1.7655750713174743
+},{
+      "startAngleOfMyArc": 1.7655750713174743,
+      "endAngleOfMyArc": 1.771858256624654
+},{
+      "startAngleOfMyArc": 1.771858256624654,
+      "endAngleOfMyArc": 1.7781414419318335
+},{
+      "startAngleOfMyArc": 1.7781414419318335,
+      "endAngleOfMyArc": 1.7844246272390132
+},{
+      "startAngleOfMyArc": 1.7844246272390132,
+      "endAngleOfMyArc": 1.7907078125461928
+},{
+      "startAngleOfMyArc": 1.7907078125461928,
+      "endAngleOfMyArc": 1.7969909978533725
+},{
+      "startAngleOfMyArc": 1.7969909978533725,
+      "endAngleOfMyArc": 1.803274183160552
+},{
+      "startAngleOfMyArc": 1.803274183160552,
+      "endAngleOfMyArc": 1.8095573684677317
+},{
+      "startAngleOfMyArc": 1.8095573684677317,
+      "endAngleOfMyArc": 1.8158405537749114
+},{
+      "startAngleOfMyArc": 1.8158405537749114,
+      "endAngleOfMyArc": 1.822123739082091
+},{
+      "startAngleOfMyArc": 1.822123739082091,
+      "endAngleOfMyArc": 1.8284069243892707
+},{
+      "startAngleOfMyArc": 1.8284069243892707,
+      "endAngleOfMyArc": 1.8346901096964503
+},{
+      "startAngleOfMyArc": 1.8346901096964503,
+      "endAngleOfMyArc": 1.84097329500363
+},{
+      "startAngleOfMyArc": 1.84097329500363,
+      "endAngleOfMyArc": 1.8472564803108096
+},{
+      "startAngleOfMyArc": 1.8472564803108096,
+      "endAngleOfMyArc": 1.8535396656179892
+},{
+      "startAngleOfMyArc": 1.8535396656179892,
+      "endAngleOfMyArc": 1.8598228509251689
+},{
+      "startAngleOfMyArc": 1.8598228509251689,
+      "endAngleOfMyArc": 1.8661060362323485
+},{
+      "startAngleOfMyArc": 1.8661060362323485,
+      "endAngleOfMyArc": 1.8723892215395281
+},{
+      "startAngleOfMyArc": 1.8723892215395281,
+      "endAngleOfMyArc": 1.8786724068467078
+},{
+      "startAngleOfMyArc": 1.8786724068467078,
+      "endAngleOfMyArc": 1.8849555921538874
+},{
+      "startAngleOfMyArc": 1.8849555921538874,
+      "endAngleOfMyArc": 1.891238777461067
+},{
+      "startAngleOfMyArc": 1.891238777461067,
+      "endAngleOfMyArc": 1.8975219627682467
+},{
+      "startAngleOfMyArc": 1.8975219627682467,
+      "endAngleOfMyArc": 1.9038051480754263
+},{
+      "startAngleOfMyArc": 1.9038051480754263,
+      "endAngleOfMyArc": 1.910088333382606
+},{
+      "startAngleOfMyArc": 1.910088333382606,
+      "endAngleOfMyArc": 1.9163715186897856
+},{
+      "startAngleOfMyArc": 1.9163715186897856,
+      "endAngleOfMyArc": 1.9226547039969653
+},{
+      "startAngleOfMyArc": 1.9226547039969653,
+      "endAngleOfMyArc": 1.928937889304145
+},{
+      "startAngleOfMyArc": 1.928937889304145,
+      "endAngleOfMyArc": 1.9352210746113245
+},{
+      "startAngleOfMyArc": 1.9352210746113245,
+      "endAngleOfMyArc": 1.9415042599185042
+},{
+      "startAngleOfMyArc": 1.9415042599185042,
+      "endAngleOfMyArc": 1.9477874452256838
+},{
+      "startAngleOfMyArc": 1.9477874452256838,
+      "endAngleOfMyArc": 1.9540706305328635
+},{
+      "startAngleOfMyArc": 1.9540706305328635,
+      "endAngleOfMyArc": 1.960353815840043
+},{
+      "startAngleOfMyArc": 1.960353815840043,
+      "endAngleOfMyArc": 1.9666370011472227
+},{
+      "startAngleOfMyArc": 1.9666370011472227,
+      "endAngleOfMyArc": 1.9729201864544024
+},{
+      "startAngleOfMyArc": 1.9729201864544024,
+      "endAngleOfMyArc": 1.979203371761582
+},{
+      "startAngleOfMyArc": 1.979203371761582,
+      "endAngleOfMyArc": 1.9854865570687616
+},{
+      "startAngleOfMyArc": 1.9854865570687616,
+      "endAngleOfMyArc": 1.9917697423759413
+},{
+      "startAngleOfMyArc": 1.9917697423759413,
+      "endAngleOfMyArc": 1.998052927683121
+},{
+      "startAngleOfMyArc": 1.998052927683121,
+      "endAngleOfMyArc": 2.0043361129903006
+},{
+      "startAngleOfMyArc": 2.0043361129903006,
+      "endAngleOfMyArc": 2.01061929829748
+},{
+      "startAngleOfMyArc": 2.01061929829748,
+      "endAngleOfMyArc": 2.01690248360466
+},{
+      "startAngleOfMyArc": 2.01690248360466,
+      "endAngleOfMyArc": 2.0231856689118395
+},{
+      "startAngleOfMyArc": 2.0231856689118395,
+      "endAngleOfMyArc": 2.029468854219019
+},{
+      "startAngleOfMyArc": 2.029468854219019,
+      "endAngleOfMyArc": 2.0357520395261988
+},{
+      "startAngleOfMyArc": 2.0357520395261988,
+      "endAngleOfMyArc": 2.0420352248333784
+},{
+      "startAngleOfMyArc": 2.0420352248333784,
+      "endAngleOfMyArc": 2.048318410140558
+},{
+      "startAngleOfMyArc": 2.048318410140558,
+      "endAngleOfMyArc": 2.0546015954477377
+},{
+      "startAngleOfMyArc": 2.0546015954477377,
+      "endAngleOfMyArc": 2.0608847807549173
+},{
+      "startAngleOfMyArc": 2.0608847807549173,
+      "endAngleOfMyArc": 2.067167966062097
+},{
+      "startAngleOfMyArc": 2.067167966062097,
+      "endAngleOfMyArc": 2.0734511513692766
+},{
+      "startAngleOfMyArc": 2.0734511513692766,
+      "endAngleOfMyArc": 2.0797343366764562
+},{
+      "startAngleOfMyArc": 2.0797343366764562,
+      "endAngleOfMyArc": 2.086017521983636
+},{
+      "startAngleOfMyArc": 2.086017521983636,
+      "endAngleOfMyArc": 2.0923007072908155
+},{
+      "startAngleOfMyArc": 2.0923007072908155,
+      "endAngleOfMyArc": 2.098583892597995
+},{
+      "startAngleOfMyArc": 2.098583892597995,
+      "endAngleOfMyArc": 2.104867077905175
+},{
+      "startAngleOfMyArc": 2.104867077905175,
+      "endAngleOfMyArc": 2.1111502632123544
+},{
+      "startAngleOfMyArc": 2.1111502632123544,
+      "endAngleOfMyArc": 2.117433448519534
+},{
+      "startAngleOfMyArc": 2.117433448519534,
+      "endAngleOfMyArc": 2.1237166338267137
+},{
+      "startAngleOfMyArc": 2.1237166338267137,
+      "endAngleOfMyArc": 2.1299998191338934
+},{
+      "startAngleOfMyArc": 2.1299998191338934,
+      "endAngleOfMyArc": 2.136283004441073
+},{
+      "startAngleOfMyArc": 2.136283004441073,
+      "endAngleOfMyArc": 2.1425661897482526
+},{
+      "startAngleOfMyArc": 2.1425661897482526,
+      "endAngleOfMyArc": 2.1488493750554323
+},{
+      "startAngleOfMyArc": 2.1488493750554323,
+      "endAngleOfMyArc": 2.155132560362612
+},{
+      "startAngleOfMyArc": 2.155132560362612,
+      "endAngleOfMyArc": 2.1614157456697916
+},{
+      "startAngleOfMyArc": 2.1614157456697916,
+      "endAngleOfMyArc": 2.167698930976971
+},{
+      "startAngleOfMyArc": 2.167698930976971,
+      "endAngleOfMyArc": 2.173982116284151
+},{
+      "startAngleOfMyArc": 2.173982116284151,
+      "endAngleOfMyArc": 2.1802653015913305
+},{
+      "startAngleOfMyArc": 2.1802653015913305,
+      "endAngleOfMyArc": 2.18654848689851
+},{
+      "startAngleOfMyArc": 2.18654848689851,
+      "endAngleOfMyArc": 2.1928316722056898
+},{
+      "startAngleOfMyArc": 2.1928316722056898,
+      "endAngleOfMyArc": 2.1991148575128694
+},{
+      "startAngleOfMyArc": 2.1991148575128694,
+      "endAngleOfMyArc": 2.205398042820049
+},{
+      "startAngleOfMyArc": 2.205398042820049,
+      "endAngleOfMyArc": 2.2116812281272287
+},{
+      "startAngleOfMyArc": 2.2116812281272287,
+      "endAngleOfMyArc": 2.2179644134344083
+},{
+      "startAngleOfMyArc": 2.2179644134344083,
+      "endAngleOfMyArc": 2.224247598741588
+},{
+      "startAngleOfMyArc": 2.224247598741588,
+      "endAngleOfMyArc": 2.2305307840487676
+},{
+      "startAngleOfMyArc": 2.2305307840487676,
+      "endAngleOfMyArc": 2.2368139693559472
+},{
+      "startAngleOfMyArc": 2.2368139693559472,
+      "endAngleOfMyArc": 2.243097154663127
+},{
+      "startAngleOfMyArc": 2.243097154663127,
+      "endAngleOfMyArc": 2.2493803399703065
+},{
+      "startAngleOfMyArc": 2.2493803399703065,
+      "endAngleOfMyArc": 2.255663525277486
+},{
+      "startAngleOfMyArc": 2.255663525277486,
+      "endAngleOfMyArc": 2.261946710584666
+},{
+      "startAngleOfMyArc": 2.261946710584666,
+      "endAngleOfMyArc": 2.2682298958918454
+},{
+      "startAngleOfMyArc": 2.2682298958918454,
+      "endAngleOfMyArc": 2.274513081199025
+},{
+      "startAngleOfMyArc": 2.274513081199025,
+      "endAngleOfMyArc": 2.2807962665062047
+},{
+      "startAngleOfMyArc": 2.2807962665062047,
+      "endAngleOfMyArc": 2.2870794518133843
+},{
+      "startAngleOfMyArc": 2.2870794518133843,
+      "endAngleOfMyArc": 2.293362637120564
+},{
+      "startAngleOfMyArc": 2.293362637120564,
+      "endAngleOfMyArc": 2.2996458224277436
+},{
+      "startAngleOfMyArc": 2.2996458224277436,
+      "endAngleOfMyArc": 2.3059290077349233
+},{
+      "startAngleOfMyArc": 2.3059290077349233,
+      "endAngleOfMyArc": 2.312212193042103
+},{
+      "startAngleOfMyArc": 2.312212193042103,
+      "endAngleOfMyArc": 2.3184953783492825
+},{
+      "startAngleOfMyArc": 2.3184953783492825,
+      "endAngleOfMyArc": 2.324778563656462
+},{
+      "startAngleOfMyArc": 2.324778563656462,
+      "endAngleOfMyArc": 2.331061748963642
+},{
+      "startAngleOfMyArc": 2.331061748963642,
+      "endAngleOfMyArc": 2.3373449342708215
+},{
+      "startAngleOfMyArc": 2.3373449342708215,
+      "endAngleOfMyArc": 2.343628119578001
+},{
+      "startAngleOfMyArc": 2.343628119578001,
+      "endAngleOfMyArc": 2.3499113048851807
+},{
+      "startAngleOfMyArc": 2.3499113048851807,
+      "endAngleOfMyArc": 2.3561944901923604
+},{
+      "startAngleOfMyArc": 2.3561944901923604,
+      "endAngleOfMyArc": 2.36247767549954
+},{
+      "startAngleOfMyArc": 2.36247767549954,
+      "endAngleOfMyArc": 2.3687608608067197
+},{
+      "startAngleOfMyArc": 2.3687608608067197,
+      "endAngleOfMyArc": 2.3750440461138993
+},{
+      "startAngleOfMyArc": 2.3750440461138993,
+      "endAngleOfMyArc": 2.381327231421079
+},{
+      "startAngleOfMyArc": 2.381327231421079,
+      "endAngleOfMyArc": 2.3876104167282586
+},{
+      "startAngleOfMyArc": 2.3876104167282586,
+      "endAngleOfMyArc": 2.393893602035438
+},{
+      "startAngleOfMyArc": 2.393893602035438,
+      "endAngleOfMyArc": 2.400176787342618
+},{
+      "startAngleOfMyArc": 2.400176787342618,
+      "endAngleOfMyArc": 2.4064599726497975
+},{
+      "startAngleOfMyArc": 2.4064599726497975,
+      "endAngleOfMyArc": 2.412743157956977
+},{
+      "startAngleOfMyArc": 2.412743157956977,
+      "endAngleOfMyArc": 2.4190263432641568
+},{
+      "startAngleOfMyArc": 2.4190263432641568,
+      "endAngleOfMyArc": 2.4253095285713364
+},{
+      "startAngleOfMyArc": 2.4253095285713364,
+      "endAngleOfMyArc": 2.431592713878516
+},{
+      "startAngleOfMyArc": 2.431592713878516,
+      "endAngleOfMyArc": 2.4378758991856957
+},{
+      "startAngleOfMyArc": 2.4378758991856957,
+      "endAngleOfMyArc": 2.4441590844928753
+},{
+      "startAngleOfMyArc": 2.4441590844928753,
+      "endAngleOfMyArc": 2.450442269800055
+},{
+      "startAngleOfMyArc": 2.450442269800055,
+      "endAngleOfMyArc": 2.4567254551072346
+},{
+      "startAngleOfMyArc": 2.4567254551072346,
+      "endAngleOfMyArc": 2.4630086404144143
+},{
+      "startAngleOfMyArc": 2.4630086404144143,
+      "endAngleOfMyArc": 2.469291825721594
+},{
+      "startAngleOfMyArc": 2.469291825721594,
+      "endAngleOfMyArc": 2.4755750110287735
+},{
+      "startAngleOfMyArc": 2.4755750110287735,
+      "endAngleOfMyArc": 2.481858196335953
+},{
+      "startAngleOfMyArc": 2.481858196335953,
+      "endAngleOfMyArc": 2.488141381643133
+},{
+      "startAngleOfMyArc": 2.488141381643133,
+      "endAngleOfMyArc": 2.4944245669503124
+},{
+      "startAngleOfMyArc": 2.4944245669503124,
+      "endAngleOfMyArc": 2.500707752257492
+},{
+      "startAngleOfMyArc": 2.500707752257492,
+      "endAngleOfMyArc": 2.5069909375646717
+},{
+      "startAngleOfMyArc": 2.5069909375646717,
+      "endAngleOfMyArc": 2.5132741228718514
+},{
+      "startAngleOfMyArc": 2.5132741228718514,
+      "endAngleOfMyArc": 2.519557308179031
+},{
+      "startAngleOfMyArc": 2.519557308179031,
+      "endAngleOfMyArc": 2.5258404934862106
+},{
+      "startAngleOfMyArc": 2.5258404934862106,
+      "endAngleOfMyArc": 2.5321236787933903
+},{
+      "startAngleOfMyArc": 2.5321236787933903,
+      "endAngleOfMyArc": 2.53840686410057
+},{
+      "startAngleOfMyArc": 2.53840686410057,
+      "endAngleOfMyArc": 2.5446900494077496
+},{
+      "startAngleOfMyArc": 2.5446900494077496,
+      "endAngleOfMyArc": 2.550973234714929
+},{
+      "startAngleOfMyArc": 2.550973234714929,
+      "endAngleOfMyArc": 2.557256420022109
+},{
+      "startAngleOfMyArc": 2.557256420022109,
+      "endAngleOfMyArc": 2.5635396053292885
+},{
+      "startAngleOfMyArc": 2.5635396053292885,
+      "endAngleOfMyArc": 2.569822790636468
+},{
+      "startAngleOfMyArc": 2.569822790636468,
+      "endAngleOfMyArc": 2.5761059759436478
+},{
+      "startAngleOfMyArc": 2.5761059759436478,
+      "endAngleOfMyArc": 2.5823891612508274
+},{
+      "startAngleOfMyArc": 2.5823891612508274,
+      "endAngleOfMyArc": 2.588672346558007
+},{
+      "startAngleOfMyArc": 2.588672346558007,
+      "endAngleOfMyArc": 2.5949555318651867
+},{
+      "startAngleOfMyArc": 2.5949555318651867,
+      "endAngleOfMyArc": 2.6012387171723663
+},{
+      "startAngleOfMyArc": 2.6012387171723663,
+      "endAngleOfMyArc": 2.607521902479546
+},{
+      "startAngleOfMyArc": 2.607521902479546,
+      "endAngleOfMyArc": 2.6138050877867256
+},{
+      "startAngleOfMyArc": 2.6138050877867256,
+      "endAngleOfMyArc": 2.6200882730939052
+},{
+      "startAngleOfMyArc": 2.6200882730939052,
+      "endAngleOfMyArc": 2.626371458401085
+},{
+      "startAngleOfMyArc": 2.626371458401085,
+      "endAngleOfMyArc": 2.6326546437082645
+},{
+      "startAngleOfMyArc": 2.6326546437082645,
+      "endAngleOfMyArc": 2.638937829015444
+},{
+      "startAngleOfMyArc": 2.638937829015444,
+      "endAngleOfMyArc": 2.645221014322624
+},{
+      "startAngleOfMyArc": 2.645221014322624,
+      "endAngleOfMyArc": 2.6515041996298034
+},{
+      "startAngleOfMyArc": 2.6515041996298034,
+      "endAngleOfMyArc": 2.657787384936983
+},{
+      "startAngleOfMyArc": 2.657787384936983,
+      "endAngleOfMyArc": 2.6640705702441627
+},{
+      "startAngleOfMyArc": 2.6640705702441627,
+      "endAngleOfMyArc": 2.6703537555513424
+},{
+      "startAngleOfMyArc": 2.6703537555513424,
+      "endAngleOfMyArc": 2.676636940858522
+},{
+      "startAngleOfMyArc": 2.676636940858522,
+      "endAngleOfMyArc": 2.6829201261657016
+},{
+      "startAngleOfMyArc": 2.6829201261657016,
+      "endAngleOfMyArc": 2.6892033114728813
+},{
+      "startAngleOfMyArc": 2.6892033114728813,
+      "endAngleOfMyArc": 2.695486496780061
+},{
+      "startAngleOfMyArc": 2.695486496780061,
+      "endAngleOfMyArc": 2.7017696820872406
+},{
+      "startAngleOfMyArc": 2.7017696820872406,
+      "endAngleOfMyArc": 2.70805286739442
+},{
+      "startAngleOfMyArc": 2.70805286739442,
+      "endAngleOfMyArc": 2.7143360527016
+},{
+      "startAngleOfMyArc": 2.7143360527016,
+      "endAngleOfMyArc": 2.7206192380087795
+},{
+      "startAngleOfMyArc": 2.7206192380087795,
+      "endAngleOfMyArc": 2.726902423315959
+},{
+      "startAngleOfMyArc": 2.726902423315959,
+      "endAngleOfMyArc": 2.7331856086231388
+},{
+      "startAngleOfMyArc": 2.7331856086231388,
+      "endAngleOfMyArc": 2.7394687939303184
+},{
+      "startAngleOfMyArc": 2.7394687939303184,
+      "endAngleOfMyArc": 2.745751979237498
+},{
+      "startAngleOfMyArc": 2.745751979237498,
+      "endAngleOfMyArc": 2.7520351645446777
+},{
+      "startAngleOfMyArc": 2.7520351645446777,
+      "endAngleOfMyArc": 2.7583183498518573
+},{
+      "startAngleOfMyArc": 2.7583183498518573,
+      "endAngleOfMyArc": 2.764601535159037
+},{
+      "startAngleOfMyArc": 2.764601535159037,
+      "endAngleOfMyArc": 2.7708847204662166
+},{
+      "startAngleOfMyArc": 2.7708847204662166,
+      "endAngleOfMyArc": 2.7771679057733962
+},{
+      "startAngleOfMyArc": 2.7771679057733962,
+      "endAngleOfMyArc": 2.783451091080576
+},{
+      "startAngleOfMyArc": 2.783451091080576,
+      "endAngleOfMyArc": 2.7897342763877555
+},{
+      "startAngleOfMyArc": 2.7897342763877555,
+      "endAngleOfMyArc": 2.796017461694935
+},{
+      "startAngleOfMyArc": 2.796017461694935,
+      "endAngleOfMyArc": 2.802300647002115
+},{
+      "startAngleOfMyArc": 2.802300647002115,
+      "endAngleOfMyArc": 2.8085838323092944
+},{
+      "startAngleOfMyArc": 2.8085838323092944,
+      "endAngleOfMyArc": 2.814867017616474
+},{
+      "startAngleOfMyArc": 2.814867017616474,
+      "endAngleOfMyArc": 2.8211502029236537
+},{
+      "startAngleOfMyArc": 2.8211502029236537,
+      "endAngleOfMyArc": 2.8274333882308333
+},{
+      "startAngleOfMyArc": 2.8274333882308333,
+      "endAngleOfMyArc": 2.833716573538013
+},{
+      "startAngleOfMyArc": 2.833716573538013,
+      "endAngleOfMyArc": 2.8399997588451926
+},{
+      "startAngleOfMyArc": 2.8399997588451926,
+      "endAngleOfMyArc": 2.8462829441523723
+},{
+      "startAngleOfMyArc": 2.8462829441523723,
+      "endAngleOfMyArc": 2.852566129459552
+},{
+      "startAngleOfMyArc": 2.852566129459552,
+      "endAngleOfMyArc": 2.8588493147667315
+},{
+      "startAngleOfMyArc": 2.8588493147667315,
+      "endAngleOfMyArc": 2.865132500073911
+},{
+      "startAngleOfMyArc": 2.865132500073911,
+      "endAngleOfMyArc": 2.871415685381091
+},{
+      "startAngleOfMyArc": 2.871415685381091,
+      "endAngleOfMyArc": 2.8776988706882705
+},{
+      "startAngleOfMyArc": 2.8776988706882705,
+      "endAngleOfMyArc": 2.88398205599545
+},{
+      "startAngleOfMyArc": 2.88398205599545,
+      "endAngleOfMyArc": 2.8902652413026297
+},{
+      "startAngleOfMyArc": 2.8902652413026297,
+      "endAngleOfMyArc": 2.8965484266098094
+},{
+      "startAngleOfMyArc": 2.8965484266098094,
+      "endAngleOfMyArc": 2.902831611916989
+},{
+      "startAngleOfMyArc": 2.902831611916989,
+      "endAngleOfMyArc": 2.9091147972241687
+},{
+      "startAngleOfMyArc": 2.9091147972241687,
+      "endAngleOfMyArc": 2.9153979825313483
+},{
+      "startAngleOfMyArc": 2.9153979825313483,
+      "endAngleOfMyArc": 2.921681167838528
+},{
+      "startAngleOfMyArc": 2.921681167838528,
+      "endAngleOfMyArc": 2.9279643531457076
+},{
+      "startAngleOfMyArc": 2.9279643531457076,
+      "endAngleOfMyArc": 2.934247538452887
+},{
+      "startAngleOfMyArc": 2.934247538452887,
+      "endAngleOfMyArc": 2.940530723760067
+},{
+      "startAngleOfMyArc": 2.940530723760067,
+      "endAngleOfMyArc": 2.9468139090672465
+},{
+      "startAngleOfMyArc": 2.9468139090672465,
+      "endAngleOfMyArc": 2.953097094374426
+},{
+      "startAngleOfMyArc": 2.953097094374426,
+      "endAngleOfMyArc": 2.9593802796816058
+},{
+      "startAngleOfMyArc": 2.9593802796816058,
+      "endAngleOfMyArc": 2.9656634649887854
+},{
+      "startAngleOfMyArc": 2.9656634649887854,
+      "endAngleOfMyArc": 2.971946650295965
+},{
+      "startAngleOfMyArc": 2.971946650295965,
+      "endAngleOfMyArc": 2.9782298356031447
+},{
+      "startAngleOfMyArc": 2.9782298356031447,
+      "endAngleOfMyArc": 2.9845130209103243
+},{
+      "startAngleOfMyArc": 2.9845130209103243,
+      "endAngleOfMyArc": 2.990796206217504
+},{
+      "startAngleOfMyArc": 2.990796206217504,
+      "endAngleOfMyArc": 2.9970793915246836
+},{
+      "startAngleOfMyArc": 2.9970793915246836,
+      "endAngleOfMyArc": 3.0033625768318633
+},{
+      "startAngleOfMyArc": 3.0033625768318633,
+      "endAngleOfMyArc": 3.009645762139043
+},{
+      "startAngleOfMyArc": 3.009645762139043,
+      "endAngleOfMyArc": 3.0159289474462225
+},{
+      "startAngleOfMyArc": 3.0159289474462225,
+      "endAngleOfMyArc": 3.022212132753402
+},{
+      "startAngleOfMyArc": 3.022212132753402,
+      "endAngleOfMyArc": 3.028495318060582
+},{
+      "startAngleOfMyArc": 3.028495318060582,
+      "endAngleOfMyArc": 3.0347785033677614
+},{
+      "startAngleOfMyArc": 3.0347785033677614,
+      "endAngleOfMyArc": 3.041061688674941
+},{
+      "startAngleOfMyArc": 3.041061688674941,
+      "endAngleOfMyArc": 3.0473448739821207
+},{
+      "startAngleOfMyArc": 3.0473448739821207,
+      "endAngleOfMyArc": 3.0536280592893004
+},{
+      "startAngleOfMyArc": 3.0536280592893004,
+      "endAngleOfMyArc": 3.05991124459648
+},{
+      "startAngleOfMyArc": 3.05991124459648,
+      "endAngleOfMyArc": 3.0661944299036596
+},{
+      "startAngleOfMyArc": 3.0661944299036596,
+      "endAngleOfMyArc": 3.0724776152108393
+},{
+      "startAngleOfMyArc": 3.0724776152108393,
+      "endAngleOfMyArc": 3.078760800518019
+},{
+      "startAngleOfMyArc": 3.078760800518019,
+      "endAngleOfMyArc": 3.0850439858251986
+},{
+      "startAngleOfMyArc": 3.0850439858251986,
+      "endAngleOfMyArc": 3.091327171132378
+},{
+      "startAngleOfMyArc": 3.091327171132378,
+      "endAngleOfMyArc": 3.097610356439558
+},{
+      "startAngleOfMyArc": 3.097610356439558,
+      "endAngleOfMyArc": 3.1038935417467375
+},{
+      "startAngleOfMyArc": 3.1038935417467375,
+      "endAngleOfMyArc": 3.110176727053917
+},{
+      "startAngleOfMyArc": 3.110176727053917,
+      "endAngleOfMyArc": 3.1164599123610968
+},{
+      "startAngleOfMyArc": 3.1164599123610968,
+      "endAngleOfMyArc": 3.1227430976682764
+},{
+      "startAngleOfMyArc": 3.1227430976682764,
+      "endAngleOfMyArc": 3.129026282975456
+},{
+      "startAngleOfMyArc": 3.129026282975456,
+      "endAngleOfMyArc": 3.1353094682826357
+},{
+      "startAngleOfMyArc": 3.1353094682826357,
+      "endAngleOfMyArc": 3.1415926535898153
+},{
+      "startAngleOfMyArc": 3.1415926535898153,
+      "endAngleOfMyArc": 3.147875838896995
+},{
+      "startAngleOfMyArc": 3.147875838896995,
+      "endAngleOfMyArc": 3.1541590242041746
+},{
+      "startAngleOfMyArc": 3.1541590242041746,
+      "endAngleOfMyArc": 3.1604422095113542
+},{
+      "startAngleOfMyArc": 3.1604422095113542,
+      "endAngleOfMyArc": 3.166725394818534
+},{
+      "startAngleOfMyArc": 3.166725394818534,
+      "endAngleOfMyArc": 3.1730085801257135
+},{
+      "startAngleOfMyArc": 3.1730085801257135,
+      "endAngleOfMyArc": 3.179291765432893
+},{
+      "startAngleOfMyArc": 3.179291765432893,
+      "endAngleOfMyArc": 3.185574950740073
+},{
+      "startAngleOfMyArc": 3.185574950740073,
+      "endAngleOfMyArc": 3.1918581360472524
+},{
+      "startAngleOfMyArc": 3.1918581360472524,
+      "endAngleOfMyArc": 3.198141321354432
+},{
+      "startAngleOfMyArc": 3.198141321354432,
+      "endAngleOfMyArc": 3.2044245066616117
+},{
+      "startAngleOfMyArc": 3.2044245066616117,
+      "endAngleOfMyArc": 3.2107076919687914
+},{
+      "startAngleOfMyArc": 3.2107076919687914,
+      "endAngleOfMyArc": 3.216990877275971
+},{
+      "startAngleOfMyArc": 3.216990877275971,
+      "endAngleOfMyArc": 3.2232740625831506
+},{
+      "startAngleOfMyArc": 3.2232740625831506,
+      "endAngleOfMyArc": 3.2295572478903303
+},{
+      "startAngleOfMyArc": 3.2295572478903303,
+      "endAngleOfMyArc": 3.23584043319751
+},{
+      "startAngleOfMyArc": 3.23584043319751,
+      "endAngleOfMyArc": 3.2421236185046896
+},{
+      "startAngleOfMyArc": 3.2421236185046896,
+      "endAngleOfMyArc": 3.248406803811869
+},{
+      "startAngleOfMyArc": 3.248406803811869,
+      "endAngleOfMyArc": 3.254689989119049
+},{
+      "startAngleOfMyArc": 3.254689989119049,
+      "endAngleOfMyArc": 3.2609731744262285
+},{
+      "startAngleOfMyArc": 3.2609731744262285,
+      "endAngleOfMyArc": 3.267256359733408
+},{
+      "startAngleOfMyArc": 3.267256359733408,
+      "endAngleOfMyArc": 3.2735395450405878
+},{
+      "startAngleOfMyArc": 3.2735395450405878,
+      "endAngleOfMyArc": 3.2798227303477674
+},{
+      "startAngleOfMyArc": 3.2798227303477674,
+      "endAngleOfMyArc": 3.286105915654947
+},{
+      "startAngleOfMyArc": 3.286105915654947,
+      "endAngleOfMyArc": 3.2923891009621267
+},{
+      "startAngleOfMyArc": 3.2923891009621267,
+      "endAngleOfMyArc": 3.2986722862693063
+},{
+      "startAngleOfMyArc": 3.2986722862693063,
+      "endAngleOfMyArc": 3.304955471576486
+},{
+      "startAngleOfMyArc": 3.304955471576486,
+      "endAngleOfMyArc": 3.3112386568836656
+},{
+      "startAngleOfMyArc": 3.3112386568836656,
+      "endAngleOfMyArc": 3.3175218421908452
+},{
+      "startAngleOfMyArc": 3.3175218421908452,
+      "endAngleOfMyArc": 3.323805027498025
+},{
+      "startAngleOfMyArc": 3.323805027498025,
+      "endAngleOfMyArc": 3.3300882128052045
+},{
+      "startAngleOfMyArc": 3.3300882128052045,
+      "endAngleOfMyArc": 3.336371398112384
+},{
+      "startAngleOfMyArc": 3.336371398112384,
+      "endAngleOfMyArc": 3.342654583419564
+},{
+      "startAngleOfMyArc": 3.342654583419564,
+      "endAngleOfMyArc": 3.3489377687267434
+},{
+      "startAngleOfMyArc": 3.3489377687267434,
+      "endAngleOfMyArc": 3.355220954033923
+},{
+      "startAngleOfMyArc": 3.355220954033923,
+      "endAngleOfMyArc": 3.3615041393411027
+},{
+      "startAngleOfMyArc": 3.3615041393411027,
+      "endAngleOfMyArc": 3.3677873246482823
+},{
+      "startAngleOfMyArc": 3.3677873246482823,
+      "endAngleOfMyArc": 3.374070509955462
+},{
+      "startAngleOfMyArc": 3.374070509955462,
+      "endAngleOfMyArc": 3.3803536952626416
+},{
+      "startAngleOfMyArc": 3.3803536952626416,
+      "endAngleOfMyArc": 3.3866368805698213
+},{
+      "startAngleOfMyArc": 3.3866368805698213,
+      "endAngleOfMyArc": 3.392920065877001
+},{
+      "startAngleOfMyArc": 3.392920065877001,
+      "endAngleOfMyArc": 3.3992032511841805
+},{
+      "startAngleOfMyArc": 3.3992032511841805,
+      "endAngleOfMyArc": 3.40548643649136
+},{
+      "startAngleOfMyArc": 3.40548643649136,
+      "endAngleOfMyArc": 3.41176962179854
+},{
+      "startAngleOfMyArc": 3.41176962179854,
+      "endAngleOfMyArc": 3.4180528071057195
+},{
+      "startAngleOfMyArc": 3.4180528071057195,
+      "endAngleOfMyArc": 3.424335992412899
+},{
+      "startAngleOfMyArc": 3.424335992412899,
+      "endAngleOfMyArc": 3.4306191777200787
+},{
+      "startAngleOfMyArc": 3.4306191777200787,
+      "endAngleOfMyArc": 3.4369023630272584
+},{
+      "startAngleOfMyArc": 3.4369023630272584,
+      "endAngleOfMyArc": 3.443185548334438
+},{
+      "startAngleOfMyArc": 3.443185548334438,
+      "endAngleOfMyArc": 3.4494687336416177
+},{
+      "startAngleOfMyArc": 3.4494687336416177,
+      "endAngleOfMyArc": 3.4557519189487973
+},{
+      "startAngleOfMyArc": 3.4557519189487973,
+      "endAngleOfMyArc": 3.462035104255977
+},{
+      "startAngleOfMyArc": 3.462035104255977,
+      "endAngleOfMyArc": 3.4683182895631566
+},{
+      "startAngleOfMyArc": 3.4683182895631566,
+      "endAngleOfMyArc": 3.474601474870336
+},{
+      "startAngleOfMyArc": 3.474601474870336,
+      "endAngleOfMyArc": 3.480884660177516
+},{
+      "startAngleOfMyArc": 3.480884660177516,
+      "endAngleOfMyArc": 3.4871678454846955
+},{
+      "startAngleOfMyArc": 3.4871678454846955,
+      "endAngleOfMyArc": 3.493451030791875
+},{
+      "startAngleOfMyArc": 3.493451030791875,
+      "endAngleOfMyArc": 3.4997342160990548
+},{
+      "startAngleOfMyArc": 3.4997342160990548,
+      "endAngleOfMyArc": 3.5060174014062344
+},{
+      "startAngleOfMyArc": 3.5060174014062344,
+      "endAngleOfMyArc": 3.512300586713414
+},{
+      "startAngleOfMyArc": 3.512300586713414,
+      "endAngleOfMyArc": 3.5185837720205937
+},{
+      "startAngleOfMyArc": 3.5185837720205937,
+      "endAngleOfMyArc": 3.5248669573277733
+},{
+      "startAngleOfMyArc": 3.5248669573277733,
+      "endAngleOfMyArc": 3.531150142634953
+},{
+      "startAngleOfMyArc": 3.531150142634953,
+      "endAngleOfMyArc": 3.5374333279421326
+},{
+      "startAngleOfMyArc": 3.5374333279421326,
+      "endAngleOfMyArc": 3.5437165132493122
+},{
+      "startAngleOfMyArc": 3.5437165132493122,
+      "endAngleOfMyArc": 3.549999698556492
+},{
+      "startAngleOfMyArc": 3.549999698556492,
+      "endAngleOfMyArc": 3.5562828838636715
+},{
+      "startAngleOfMyArc": 3.5562828838636715,
+      "endAngleOfMyArc": 3.562566069170851
+},{
+      "startAngleOfMyArc": 3.562566069170851,
+      "endAngleOfMyArc": 3.568849254478031
+},{
+      "startAngleOfMyArc": 3.568849254478031,
+      "endAngleOfMyArc": 3.5751324397852104
+},{
+      "startAngleOfMyArc": 3.5751324397852104,
+      "endAngleOfMyArc": 3.58141562509239
+},{
+      "startAngleOfMyArc": 3.58141562509239,
+      "endAngleOfMyArc": 3.5876988103995697
+},{
+      "startAngleOfMyArc": 3.5876988103995697,
+      "endAngleOfMyArc": 3.5939819957067494
+},{
+      "startAngleOfMyArc": 3.5939819957067494,
+      "endAngleOfMyArc": 3.600265181013929
+},{
+      "startAngleOfMyArc": 3.600265181013929,
+      "endAngleOfMyArc": 3.6065483663211086
+},{
+      "startAngleOfMyArc": 3.6065483663211086,
+      "endAngleOfMyArc": 3.6128315516282883
+},{
+      "startAngleOfMyArc": 3.6128315516282883,
+      "endAngleOfMyArc": 3.619114736935468
+},{
+      "startAngleOfMyArc": 3.619114736935468,
+      "endAngleOfMyArc": 3.6253979222426476
+},{
+      "startAngleOfMyArc": 3.6253979222426476,
+      "endAngleOfMyArc": 3.631681107549827
+},{
+      "startAngleOfMyArc": 3.631681107549827,
+      "endAngleOfMyArc": 3.637964292857007
+},{
+      "startAngleOfMyArc": 3.637964292857007,
+      "endAngleOfMyArc": 3.6442474781641865
+},{
+      "startAngleOfMyArc": 3.6442474781641865,
+      "endAngleOfMyArc": 3.650530663471366
+},{
+      "startAngleOfMyArc": 3.650530663471366,
+      "endAngleOfMyArc": 3.6568138487785458
+},{
+      "startAngleOfMyArc": 3.6568138487785458,
+      "endAngleOfMyArc": 3.6630970340857254
+},{
+      "startAngleOfMyArc": 3.6630970340857254,
+      "endAngleOfMyArc": 3.669380219392905
+},{
+      "startAngleOfMyArc": 3.669380219392905,
+      "endAngleOfMyArc": 3.6756634047000847
+},{
+      "startAngleOfMyArc": 3.6756634047000847,
+      "endAngleOfMyArc": 3.6819465900072643
+},{
+      "startAngleOfMyArc": 3.6819465900072643,
+      "endAngleOfMyArc": 3.688229775314444
+},{
+      "startAngleOfMyArc": 3.688229775314444,
+      "endAngleOfMyArc": 3.6945129606216236
+},{
+      "startAngleOfMyArc": 3.6945129606216236,
+      "endAngleOfMyArc": 3.7007961459288032
+},{
+      "startAngleOfMyArc": 3.7007961459288032,
+      "endAngleOfMyArc": 3.707079331235983
+},{
+      "startAngleOfMyArc": 3.707079331235983,
+      "endAngleOfMyArc": 3.7133625165431625
+},{
+      "startAngleOfMyArc": 3.7133625165431625,
+      "endAngleOfMyArc": 3.719645701850342
+},{
+      "startAngleOfMyArc": 3.719645701850342,
+      "endAngleOfMyArc": 3.725928887157522
+},{
+      "startAngleOfMyArc": 3.725928887157522,
+      "endAngleOfMyArc": 3.7322120724647014
+},{
+      "startAngleOfMyArc": 3.7322120724647014,
+      "endAngleOfMyArc": 3.738495257771881
+},{
+      "startAngleOfMyArc": 3.738495257771881,
+      "endAngleOfMyArc": 3.7447784430790607
+},{
+      "startAngleOfMyArc": 3.7447784430790607,
+      "endAngleOfMyArc": 3.7510616283862404
+},{
+      "startAngleOfMyArc": 3.7510616283862404,
+      "endAngleOfMyArc": 3.75734481369342
+},{
+      "startAngleOfMyArc": 3.75734481369342,
+      "endAngleOfMyArc": 3.7636279990005996
+},{
+      "startAngleOfMyArc": 3.7636279990005996,
+      "endAngleOfMyArc": 3.7699111843077793
+},{
+      "startAngleOfMyArc": 3.7699111843077793,
+      "endAngleOfMyArc": 3.776194369614959
+},{
+      "startAngleOfMyArc": 3.776194369614959,
+      "endAngleOfMyArc": 3.7824775549221386
+},{
+      "startAngleOfMyArc": 3.7824775549221386,
+      "endAngleOfMyArc": 3.788760740229318
+},{
+      "startAngleOfMyArc": 3.788760740229318,
+      "endAngleOfMyArc": 3.795043925536498
+},{
+      "startAngleOfMyArc": 3.795043925536498,
+      "endAngleOfMyArc": 3.8013271108436775
+},{
+      "startAngleOfMyArc": 3.8013271108436775,
+      "endAngleOfMyArc": 3.807610296150857
+},{
+      "startAngleOfMyArc": 3.807610296150857,
+      "endAngleOfMyArc": 3.8138934814580367
+},{
+      "startAngleOfMyArc": 3.8138934814580367,
+      "endAngleOfMyArc": 3.8201766667652164
+},{
+      "startAngleOfMyArc": 3.8201766667652164,
+      "endAngleOfMyArc": 3.826459852072396
+},{
+      "startAngleOfMyArc": 3.826459852072396,
+      "endAngleOfMyArc": 3.8327430373795757
+},{
+      "startAngleOfMyArc": 3.8327430373795757,
+      "endAngleOfMyArc": 3.8390262226867553
+},{
+      "startAngleOfMyArc": 3.8390262226867553,
+      "endAngleOfMyArc": 3.845309407993935
+},{
+      "startAngleOfMyArc": 3.845309407993935,
+      "endAngleOfMyArc": 3.8515925933011146
+},{
+      "startAngleOfMyArc": 3.8515925933011146,
+      "endAngleOfMyArc": 3.8578757786082942
+},{
+      "startAngleOfMyArc": 3.8578757786082942,
+      "endAngleOfMyArc": 3.864158963915474
+},{
+      "startAngleOfMyArc": 3.864158963915474,
+      "endAngleOfMyArc": 3.8704421492226535
+},{
+      "startAngleOfMyArc": 3.8704421492226535,
+      "endAngleOfMyArc": 3.876725334529833
+},{
+      "startAngleOfMyArc": 3.876725334529833,
+      "endAngleOfMyArc": 3.883008519837013
+},{
+      "startAngleOfMyArc": 3.883008519837013,
+      "endAngleOfMyArc": 3.8892917051441924
+},{
+      "startAngleOfMyArc": 3.8892917051441924,
+      "endAngleOfMyArc": 3.895574890451372
+},{
+      "startAngleOfMyArc": 3.895574890451372,
+      "endAngleOfMyArc": 3.9018580757585517
+},{
+      "startAngleOfMyArc": 3.9018580757585517,
+      "endAngleOfMyArc": 3.9081412610657313
+},{
+      "startAngleOfMyArc": 3.9081412610657313,
+      "endAngleOfMyArc": 3.914424446372911
+},{
+      "startAngleOfMyArc": 3.914424446372911,
+      "endAngleOfMyArc": 3.9207076316800906
+},{
+      "startAngleOfMyArc": 3.9207076316800906,
+      "endAngleOfMyArc": 3.9269908169872703
+},{
+      "startAngleOfMyArc": 3.9269908169872703,
+      "endAngleOfMyArc": 3.93327400229445
+},{
+      "startAngleOfMyArc": 3.93327400229445,
+      "endAngleOfMyArc": 3.9395571876016295
+},{
+      "startAngleOfMyArc": 3.9395571876016295,
+      "endAngleOfMyArc": 3.945840372908809
+},{
+      "startAngleOfMyArc": 3.945840372908809,
+      "endAngleOfMyArc": 3.952123558215989
+},{
+      "startAngleOfMyArc": 3.952123558215989,
+      "endAngleOfMyArc": 3.9584067435231685
+},{
+      "startAngleOfMyArc": 3.9584067435231685,
+      "endAngleOfMyArc": 3.964689928830348
+},{
+      "startAngleOfMyArc": 3.964689928830348,
+      "endAngleOfMyArc": 3.9709731141375277
+},{
+      "startAngleOfMyArc": 3.9709731141375277,
+      "endAngleOfMyArc": 3.9772562994447074
+},{
+      "startAngleOfMyArc": 3.9772562994447074,
+      "endAngleOfMyArc": 3.983539484751887
+},{
+      "startAngleOfMyArc": 3.983539484751887,
+      "endAngleOfMyArc": 3.9898226700590667
+},{
+      "startAngleOfMyArc": 3.9898226700590667,
+      "endAngleOfMyArc": 3.9961058553662463
+},{
+      "startAngleOfMyArc": 3.9961058553662463,
+      "endAngleOfMyArc": 4.0023890406734255
+},{
+      "startAngleOfMyArc": 4.0023890406734255,
+      "endAngleOfMyArc": 4.008672225980605
+},{
+      "startAngleOfMyArc": 4.008672225980605,
+      "endAngleOfMyArc": 4.014955411287784
+},{
+      "startAngleOfMyArc": 4.014955411287784,
+      "endAngleOfMyArc": 4.021238596594963
+},{
+      "startAngleOfMyArc": 4.021238596594963,
+      "endAngleOfMyArc": 4.027521781902142
+},{
+      "startAngleOfMyArc": 4.027521781902142,
+      "endAngleOfMyArc": 4.0338049672093215
+},{
+      "startAngleOfMyArc": 4.0338049672093215,
+      "endAngleOfMyArc": 4.040088152516501
+},{
+      "startAngleOfMyArc": 4.040088152516501,
+      "endAngleOfMyArc": 4.04637133782368
+},{
+      "startAngleOfMyArc": 4.04637133782368,
+      "endAngleOfMyArc": 4.052654523130859
+},{
+      "startAngleOfMyArc": 4.052654523130859,
+      "endAngleOfMyArc": 4.058937708438038
+},{
+      "startAngleOfMyArc": 4.058937708438038,
+      "endAngleOfMyArc": 4.0652208937452174
+},{
+      "startAngleOfMyArc": 4.0652208937452174,
+      "endAngleOfMyArc": 4.071504079052397
+},{
+      "startAngleOfMyArc": 4.071504079052397,
+      "endAngleOfMyArc": 4.077787264359576
+},{
+      "startAngleOfMyArc": 4.077787264359576,
+      "endAngleOfMyArc": 4.084070449666755
+},{
+      "startAngleOfMyArc": 4.084070449666755,
+      "endAngleOfMyArc": 4.090353634973934
+},{
+      "startAngleOfMyArc": 4.090353634973934,
+      "endAngleOfMyArc": 4.096636820281113
+},{
+      "startAngleOfMyArc": 4.096636820281113,
+      "endAngleOfMyArc": 4.102920005588293
+},{
+      "startAngleOfMyArc": 4.102920005588293,
+      "endAngleOfMyArc": 4.109203190895472
+},{
+      "startAngleOfMyArc": 4.109203190895472,
+      "endAngleOfMyArc": 4.115486376202651
+},{
+      "startAngleOfMyArc": 4.115486376202651,
+      "endAngleOfMyArc": 4.12176956150983
+},{
+      "startAngleOfMyArc": 4.12176956150983,
+      "endAngleOfMyArc": 4.128052746817009
+},{
+      "startAngleOfMyArc": 4.128052746817009,
+      "endAngleOfMyArc": 4.134335932124189
+},{
+      "startAngleOfMyArc": 4.134335932124189,
+      "endAngleOfMyArc": 4.140619117431368
+},{
+      "startAngleOfMyArc": 4.140619117431368,
+      "endAngleOfMyArc": 4.146902302738547
+},{
+      "startAngleOfMyArc": 4.146902302738547,
+      "endAngleOfMyArc": 4.153185488045726
+},{
+      "startAngleOfMyArc": 4.153185488045726,
+      "endAngleOfMyArc": 4.159468673352905
+},{
+      "startAngleOfMyArc": 4.159468673352905,
+      "endAngleOfMyArc": 4.165751858660085
+},{
+      "startAngleOfMyArc": 4.165751858660085,
+      "endAngleOfMyArc": 4.172035043967264
+},{
+      "startAngleOfMyArc": 4.172035043967264,
+      "endAngleOfMyArc": 4.178318229274443
+},{
+      "startAngleOfMyArc": 4.178318229274443,
+      "endAngleOfMyArc": 4.184601414581622
+},{
+      "startAngleOfMyArc": 4.184601414581622,
+      "endAngleOfMyArc": 4.190884599888801
+},{
+      "startAngleOfMyArc": 4.190884599888801,
+      "endAngleOfMyArc": 4.1971677851959805
+},{
+      "startAngleOfMyArc": 4.1971677851959805,
+      "endAngleOfMyArc": 4.20345097050316
+},{
+      "startAngleOfMyArc": 4.20345097050316,
+      "endAngleOfMyArc": 4.209734155810339
+},{
+      "startAngleOfMyArc": 4.209734155810339,
+      "endAngleOfMyArc": 4.216017341117518
+},{
+      "startAngleOfMyArc": 4.216017341117518,
+      "endAngleOfMyArc": 4.222300526424697
+},{
+      "startAngleOfMyArc": 4.222300526424697,
+      "endAngleOfMyArc": 4.2285837117318765
+},{
+      "startAngleOfMyArc": 4.2285837117318765,
+      "endAngleOfMyArc": 4.234866897039056
+},{
+      "startAngleOfMyArc": 4.234866897039056,
+      "endAngleOfMyArc": 4.241150082346235
+},{
+      "startAngleOfMyArc": 4.241150082346235,
+      "endAngleOfMyArc": 4.247433267653414
+},{
+      "startAngleOfMyArc": 4.247433267653414,
+      "endAngleOfMyArc": 4.253716452960593
+},{
+      "startAngleOfMyArc": 4.253716452960593,
+      "endAngleOfMyArc": 4.2599996382677725
+},{
+      "startAngleOfMyArc": 4.2599996382677725,
+      "endAngleOfMyArc": 4.266282823574952
+},{
+      "startAngleOfMyArc": 4.266282823574952,
+      "endAngleOfMyArc": 4.272566008882131
+},{
+      "startAngleOfMyArc": 4.272566008882131,
+      "endAngleOfMyArc": 4.27884919418931
+},{
+      "startAngleOfMyArc": 4.27884919418931,
+      "endAngleOfMyArc": 4.285132379496489
+},{
+      "startAngleOfMyArc": 4.285132379496489,
+      "endAngleOfMyArc": 4.2914155648036685
+},{
+      "startAngleOfMyArc": 4.2914155648036685,
+      "endAngleOfMyArc": 4.297698750110848
+},{
+      "startAngleOfMyArc": 4.297698750110848,
+      "endAngleOfMyArc": 4.303981935418027
+},{
+      "startAngleOfMyArc": 4.303981935418027,
+      "endAngleOfMyArc": 4.310265120725206
+},{
+      "startAngleOfMyArc": 4.310265120725206,
+      "endAngleOfMyArc": 4.316548306032385
+},{
+      "startAngleOfMyArc": 4.316548306032385,
+      "endAngleOfMyArc": 4.3228314913395645
+},{
+      "startAngleOfMyArc": 4.3228314913395645,
+      "endAngleOfMyArc": 4.329114676646744
+},{
+      "startAngleOfMyArc": 4.329114676646744,
+      "endAngleOfMyArc": 4.335397861953923
+},{
+      "startAngleOfMyArc": 4.335397861953923,
+      "endAngleOfMyArc": 4.341681047261102
+},{
+      "startAngleOfMyArc": 4.341681047261102,
+      "endAngleOfMyArc": 4.347964232568281
+},{
+      "startAngleOfMyArc": 4.347964232568281,
+      "endAngleOfMyArc": 4.35424741787546
+},{
+      "startAngleOfMyArc": 4.35424741787546,
+      "endAngleOfMyArc": 4.36053060318264
+},{
+      "startAngleOfMyArc": 4.36053060318264,
+      "endAngleOfMyArc": 4.366813788489819
+},{
+      "startAngleOfMyArc": 4.366813788489819,
+      "endAngleOfMyArc": 4.373096973796998
+},{
+      "startAngleOfMyArc": 4.373096973796998,
+      "endAngleOfMyArc": 4.379380159104177
+},{
+      "startAngleOfMyArc": 4.379380159104177,
+      "endAngleOfMyArc": 4.385663344411356
+},{
+      "startAngleOfMyArc": 4.385663344411356,
+      "endAngleOfMyArc": 4.391946529718536
+},{
+      "startAngleOfMyArc": 4.391946529718536,
+      "endAngleOfMyArc": 4.398229715025715
+},{
+      "startAngleOfMyArc": 4.398229715025715,
+      "endAngleOfMyArc": 4.404512900332894
+},{
+      "startAngleOfMyArc": 4.404512900332894,
+      "endAngleOfMyArc": 4.410796085640073
+},{
+      "startAngleOfMyArc": 4.410796085640073,
+      "endAngleOfMyArc": 4.417079270947252
+},{
+      "startAngleOfMyArc": 4.417079270947252,
+      "endAngleOfMyArc": 4.423362456254432
+},{
+      "startAngleOfMyArc": 4.423362456254432,
+      "endAngleOfMyArc": 4.429645641561611
+},{
+      "startAngleOfMyArc": 4.429645641561611,
+      "endAngleOfMyArc": 4.43592882686879
+},{
+      "startAngleOfMyArc": 4.43592882686879,
+      "endAngleOfMyArc": 4.442212012175969
+},{
+      "startAngleOfMyArc": 4.442212012175969,
+      "endAngleOfMyArc": 4.448495197483148
+},{
+      "startAngleOfMyArc": 4.448495197483148,
+      "endAngleOfMyArc": 4.454778382790328
+},{
+      "startAngleOfMyArc": 4.454778382790328,
+      "endAngleOfMyArc": 4.461061568097507
+},{
+      "startAngleOfMyArc": 4.461061568097507,
+      "endAngleOfMyArc": 4.467344753404686
+},{
+      "startAngleOfMyArc": 4.467344753404686,
+      "endAngleOfMyArc": 4.473627938711865
+},{
+      "startAngleOfMyArc": 4.473627938711865,
+      "endAngleOfMyArc": 4.479911124019044
+},{
+      "startAngleOfMyArc": 4.479911124019044,
+      "endAngleOfMyArc": 4.4861943093262235
+},{
+      "startAngleOfMyArc": 4.4861943093262235,
+      "endAngleOfMyArc": 4.492477494633403
+},{
+      "startAngleOfMyArc": 4.492477494633403,
+      "endAngleOfMyArc": 4.498760679940582
+},{
+      "startAngleOfMyArc": 4.498760679940582,
+      "endAngleOfMyArc": 4.505043865247761
+},{
+      "startAngleOfMyArc": 4.505043865247761,
+      "endAngleOfMyArc": 4.51132705055494
+},{
+      "startAngleOfMyArc": 4.51132705055494,
+      "endAngleOfMyArc": 4.5176102358621195
+},{
+      "startAngleOfMyArc": 4.5176102358621195,
+      "endAngleOfMyArc": 4.523893421169299
+},{
+      "startAngleOfMyArc": 4.523893421169299,
+      "endAngleOfMyArc": 4.530176606476478
+},{
+      "startAngleOfMyArc": 4.530176606476478,
+      "endAngleOfMyArc": 4.536459791783657
+},{
+      "startAngleOfMyArc": 4.536459791783657,
+      "endAngleOfMyArc": 4.542742977090836
+},{
+      "startAngleOfMyArc": 4.542742977090836,
+      "endAngleOfMyArc": 4.5490261623980155
+},{
+      "startAngleOfMyArc": 4.5490261623980155,
+      "endAngleOfMyArc": 4.555309347705195
+},{
+      "startAngleOfMyArc": 4.555309347705195,
+      "endAngleOfMyArc": 4.561592533012374
+},{
+      "startAngleOfMyArc": 4.561592533012374,
+      "endAngleOfMyArc": 4.567875718319553
+},{
+      "startAngleOfMyArc": 4.567875718319553,
+      "endAngleOfMyArc": 4.574158903626732
+},{
+      "startAngleOfMyArc": 4.574158903626732,
+      "endAngleOfMyArc": 4.5804420889339115
+},{
+      "startAngleOfMyArc": 4.5804420889339115,
+      "endAngleOfMyArc": 4.586725274241091
+},{
+      "startAngleOfMyArc": 4.586725274241091,
+      "endAngleOfMyArc": 4.59300845954827
+},{
+      "startAngleOfMyArc": 4.59300845954827,
+      "endAngleOfMyArc": 4.599291644855449
+},{
+      "startAngleOfMyArc": 4.599291644855449,
+      "endAngleOfMyArc": 4.605574830162628
+},{
+      "startAngleOfMyArc": 4.605574830162628,
+      "endAngleOfMyArc": 4.6118580154698074
+},{
+      "startAngleOfMyArc": 4.6118580154698074,
+      "endAngleOfMyArc": 4.618141200776987
+},{
+      "startAngleOfMyArc": 4.618141200776987,
+      "endAngleOfMyArc": 4.624424386084166
+},{
+      "startAngleOfMyArc": 4.624424386084166,
+      "endAngleOfMyArc": 4.630707571391345
+},{
+      "startAngleOfMyArc": 4.630707571391345,
+      "endAngleOfMyArc": 4.636990756698524
+},{
+      "startAngleOfMyArc": 4.636990756698524,
+      "endAngleOfMyArc": 4.643273942005703
+},{
+      "startAngleOfMyArc": 4.643273942005703,
+      "endAngleOfMyArc": 4.649557127312883
+},{
+      "startAngleOfMyArc": 4.649557127312883,
+      "endAngleOfMyArc": 4.655840312620062
+},{
+      "startAngleOfMyArc": 4.655840312620062,
+      "endAngleOfMyArc": 4.662123497927241
+},{
+      "startAngleOfMyArc": 4.662123497927241,
+      "endAngleOfMyArc": 4.66840668323442
+},{
+      "startAngleOfMyArc": 4.66840668323442,
+      "endAngleOfMyArc": 4.674689868541599
+},{
+      "startAngleOfMyArc": 4.674689868541599,
+      "endAngleOfMyArc": 4.680973053848779
+},{
+      "startAngleOfMyArc": 4.680973053848779,
+      "endAngleOfMyArc": 4.687256239155958
+},{
+      "startAngleOfMyArc": 4.687256239155958,
+      "endAngleOfMyArc": 4.693539424463137
+},{
+      "startAngleOfMyArc": 4.693539424463137,
+      "endAngleOfMyArc": 4.699822609770316
+},{
+      "startAngleOfMyArc": 4.699822609770316,
+      "endAngleOfMyArc": 4.706105795077495
+},{
+      "startAngleOfMyArc": 4.706105795077495,
+      "endAngleOfMyArc": 4.712388980384675
+},{
+      "startAngleOfMyArc": 4.712388980384675,
+      "endAngleOfMyArc": 4.718672165691854
+},{
+      "startAngleOfMyArc": 4.718672165691854,
+      "endAngleOfMyArc": 4.724955350999033
+},{
+      "startAngleOfMyArc": 4.724955350999033,
+      "endAngleOfMyArc": 4.731238536306212
+},{
+      "startAngleOfMyArc": 4.731238536306212,
+      "endAngleOfMyArc": 4.737521721613391
+},{
+      "startAngleOfMyArc": 4.737521721613391,
+      "endAngleOfMyArc": 4.7438049069205706
+},{
+      "startAngleOfMyArc": 4.7438049069205706,
+      "endAngleOfMyArc": 4.75008809222775
+},{
+      "startAngleOfMyArc": 4.75008809222775,
+      "endAngleOfMyArc": 4.756371277534929
+},{
+      "startAngleOfMyArc": 4.756371277534929,
+      "endAngleOfMyArc": 4.762654462842108
+},{
+      "startAngleOfMyArc": 4.762654462842108,
+      "endAngleOfMyArc": 4.768937648149287
+},{
+      "startAngleOfMyArc": 4.768937648149287,
+      "endAngleOfMyArc": 4.7752208334564665
+},{
+      "startAngleOfMyArc": 4.7752208334564665,
+      "endAngleOfMyArc": 4.781504018763646
+},{
+      "startAngleOfMyArc": 4.781504018763646,
+      "endAngleOfMyArc": 4.787787204070825
+},{
+      "startAngleOfMyArc": 4.787787204070825,
+      "endAngleOfMyArc": 4.794070389378004
+},{
+      "startAngleOfMyArc": 4.794070389378004,
+      "endAngleOfMyArc": 4.800353574685183
+},{
+      "startAngleOfMyArc": 4.800353574685183,
+      "endAngleOfMyArc": 4.8066367599923625
+},{
+      "startAngleOfMyArc": 4.8066367599923625,
+      "endAngleOfMyArc": 4.812919945299542
+},{
+      "startAngleOfMyArc": 4.812919945299542,
+      "endAngleOfMyArc": 4.819203130606721
+},{
+      "startAngleOfMyArc": 4.819203130606721,
+      "endAngleOfMyArc": 4.8254863159139
+},{
+      "startAngleOfMyArc": 4.8254863159139,
+      "endAngleOfMyArc": 4.831769501221079
+},{
+      "startAngleOfMyArc": 4.831769501221079,
+      "endAngleOfMyArc": 4.8380526865282585
+},{
+      "startAngleOfMyArc": 4.8380526865282585,
+      "endAngleOfMyArc": 4.844335871835438
+},{
+      "startAngleOfMyArc": 4.844335871835438,
+      "endAngleOfMyArc": 4.850619057142617
+},{
+      "startAngleOfMyArc": 4.850619057142617,
+      "endAngleOfMyArc": 4.856902242449796
+},{
+      "startAngleOfMyArc": 4.856902242449796,
+      "endAngleOfMyArc": 4.863185427756975
+},{
+      "startAngleOfMyArc": 4.863185427756975,
+      "endAngleOfMyArc": 4.8694686130641545
+},{
+      "startAngleOfMyArc": 4.8694686130641545,
+      "endAngleOfMyArc": 4.875751798371334
+},{
+      "startAngleOfMyArc": 4.875751798371334,
+      "endAngleOfMyArc": 4.882034983678513
+},{
+      "startAngleOfMyArc": 4.882034983678513,
+      "endAngleOfMyArc": 4.888318168985692
+},{
+      "startAngleOfMyArc": 4.888318168985692,
+      "endAngleOfMyArc": 4.894601354292871
+},{
+      "startAngleOfMyArc": 4.894601354292871,
+      "endAngleOfMyArc": 4.90088453960005
+},{
+      "startAngleOfMyArc": 4.90088453960005,
+      "endAngleOfMyArc": 4.90716772490723
+},{
+      "startAngleOfMyArc": 4.90716772490723,
+      "endAngleOfMyArc": 4.913450910214409
+},{
+      "startAngleOfMyArc": 4.913450910214409,
+      "endAngleOfMyArc": 4.919734095521588
+},{
+      "startAngleOfMyArc": 4.919734095521588,
+      "endAngleOfMyArc": 4.926017280828767
+},{
+      "startAngleOfMyArc": 4.926017280828767,
+      "endAngleOfMyArc": 4.932300466135946
+},{
+      "startAngleOfMyArc": 4.932300466135946,
+      "endAngleOfMyArc": 4.938583651443126
+},{
+      "startAngleOfMyArc": 4.938583651443126,
+      "endAngleOfMyArc": 4.944866836750305
+},{
+      "startAngleOfMyArc": 4.944866836750305,
+      "endAngleOfMyArc": 4.951150022057484
+},{
+      "startAngleOfMyArc": 4.951150022057484,
+      "endAngleOfMyArc": 4.957433207364663
+},{
+      "startAngleOfMyArc": 4.957433207364663,
+      "endAngleOfMyArc": 4.963716392671842
+},{
+      "startAngleOfMyArc": 4.963716392671842,
+      "endAngleOfMyArc": 4.969999577979022
+},{
+      "startAngleOfMyArc": 4.969999577979022,
+      "endAngleOfMyArc": 4.976282763286201
+},{
+      "startAngleOfMyArc": 4.976282763286201,
+      "endAngleOfMyArc": 4.98256594859338
+},{
+      "startAngleOfMyArc": 4.98256594859338,
+      "endAngleOfMyArc": 4.988849133900559
+},{
+      "startAngleOfMyArc": 4.988849133900559,
+      "endAngleOfMyArc": 4.995132319207738
+},{
+      "startAngleOfMyArc": 4.995132319207738,
+      "endAngleOfMyArc": 5.001415504514918
+},{
+      "startAngleOfMyArc": 5.001415504514918,
+      "endAngleOfMyArc": 5.007698689822097
+},{
+      "startAngleOfMyArc": 5.007698689822097,
+      "endAngleOfMyArc": 5.013981875129276
+},{
+      "startAngleOfMyArc": 5.013981875129276,
+      "endAngleOfMyArc": 5.020265060436455
+},{
+      "startAngleOfMyArc": 5.020265060436455,
+      "endAngleOfMyArc": 5.026548245743634
+},{
+      "startAngleOfMyArc": 5.026548245743634,
+      "endAngleOfMyArc": 5.0328314310508135
+},{
+      "startAngleOfMyArc": 5.0328314310508135,
+      "endAngleOfMyArc": 5.039114616357993
+},{
+      "startAngleOfMyArc": 5.039114616357993,
+      "endAngleOfMyArc": 5.045397801665172
+},{
+      "startAngleOfMyArc": 5.045397801665172,
+      "endAngleOfMyArc": 5.051680986972351
+},{
+      "startAngleOfMyArc": 5.051680986972351,
+      "endAngleOfMyArc": 5.05796417227953
+},{
+      "startAngleOfMyArc": 5.05796417227953,
+      "endAngleOfMyArc": 5.0642473575867095
+},{
+      "startAngleOfMyArc": 5.0642473575867095,
+      "endAngleOfMyArc": 5.070530542893889
+},{
+      "startAngleOfMyArc": 5.070530542893889,
+      "endAngleOfMyArc": 5.076813728201068
+},{
+      "startAngleOfMyArc": 5.076813728201068,
+      "endAngleOfMyArc": 5.083096913508247
+},{
+      "startAngleOfMyArc": 5.083096913508247,
+      "endAngleOfMyArc": 5.089380098815426
+},{
+      "startAngleOfMyArc": 5.089380098815426,
+      "endAngleOfMyArc": 5.0956632841226055
+},{
+      "startAngleOfMyArc": 5.0956632841226055,
+      "endAngleOfMyArc": 5.101946469429785
+},{
+      "startAngleOfMyArc": 5.101946469429785,
+      "endAngleOfMyArc": 5.108229654736964
+},{
+      "startAngleOfMyArc": 5.108229654736964,
+      "endAngleOfMyArc": 5.114512840044143
+},{
+      "startAngleOfMyArc": 5.114512840044143,
+      "endAngleOfMyArc": 5.120796025351322
+},{
+      "startAngleOfMyArc": 5.120796025351322,
+      "endAngleOfMyArc": 5.1270792106585015
+},{
+      "startAngleOfMyArc": 5.1270792106585015,
+      "endAngleOfMyArc": 5.133362395965681
+},{
+      "startAngleOfMyArc": 5.133362395965681,
+      "endAngleOfMyArc": 5.13964558127286
+},{
+      "startAngleOfMyArc": 5.13964558127286,
+      "endAngleOfMyArc": 5.145928766580039
+},{
+      "startAngleOfMyArc": 5.145928766580039,
+      "endAngleOfMyArc": 5.152211951887218
+},{
+      "startAngleOfMyArc": 5.152211951887218,
+      "endAngleOfMyArc": 5.1584951371943975
+},{
+      "startAngleOfMyArc": 5.1584951371943975,
+      "endAngleOfMyArc": 5.164778322501577
+},{
+      "startAngleOfMyArc": 5.164778322501577,
+      "endAngleOfMyArc": 5.171061507808756
+},{
+      "startAngleOfMyArc": 5.171061507808756,
+      "endAngleOfMyArc": 5.177344693115935
+},{
+      "startAngleOfMyArc": 5.177344693115935,
+      "endAngleOfMyArc": 5.183627878423114
+},{
+      "startAngleOfMyArc": 5.183627878423114,
+      "endAngleOfMyArc": 5.189911063730293
+},{
+      "startAngleOfMyArc": 5.189911063730293,
+      "endAngleOfMyArc": 5.196194249037473
+},{
+      "startAngleOfMyArc": 5.196194249037473,
+      "endAngleOfMyArc": 5.202477434344652
+},{
+      "startAngleOfMyArc": 5.202477434344652,
+      "endAngleOfMyArc": 5.208760619651831
+},{
+      "startAngleOfMyArc": 5.208760619651831,
+      "endAngleOfMyArc": 5.21504380495901
+},{
+      "startAngleOfMyArc": 5.21504380495901,
+      "endAngleOfMyArc": 5.221326990266189
+},{
+      "startAngleOfMyArc": 5.221326990266189,
+      "endAngleOfMyArc": 5.227610175573369
+},{
+      "startAngleOfMyArc": 5.227610175573369,
+      "endAngleOfMyArc": 5.233893360880548
+},{
+      "startAngleOfMyArc": 5.233893360880548,
+      "endAngleOfMyArc": 5.240176546187727
+},{
+      "startAngleOfMyArc": 5.240176546187727,
+      "endAngleOfMyArc": 5.246459731494906
+},{
+      "startAngleOfMyArc": 5.246459731494906,
+      "endAngleOfMyArc": 5.252742916802085
+},{
+      "startAngleOfMyArc": 5.252742916802085,
+      "endAngleOfMyArc": 5.259026102109265
+},{
+      "startAngleOfMyArc": 5.259026102109265,
+      "endAngleOfMyArc": 5.265309287416444
+},{
+      "startAngleOfMyArc": 5.265309287416444,
+      "endAngleOfMyArc": 5.271592472723623
+},{
+      "startAngleOfMyArc": 5.271592472723623,
+      "endAngleOfMyArc": 5.277875658030802
+},{
+      "startAngleOfMyArc": 5.277875658030802,
+      "endAngleOfMyArc": 5.284158843337981
+},{
+      "startAngleOfMyArc": 5.284158843337981,
+      "endAngleOfMyArc": 5.2904420286451606
+},{
+      "startAngleOfMyArc": 5.2904420286451606,
+      "endAngleOfMyArc": 5.29672521395234
+},{
+      "startAngleOfMyArc": 5.29672521395234,
+      "endAngleOfMyArc": 5.303008399259519
+},{
+      "startAngleOfMyArc": 5.303008399259519,
+      "endAngleOfMyArc": 5.309291584566698
+},{
+      "startAngleOfMyArc": 5.309291584566698,
+      "endAngleOfMyArc": 5.315574769873877
+},{
+      "startAngleOfMyArc": 5.315574769873877,
+      "endAngleOfMyArc": 5.3218579551810565
+},{
+      "startAngleOfMyArc": 5.3218579551810565,
+      "endAngleOfMyArc": 5.328141140488236
+},{
+      "startAngleOfMyArc": 5.328141140488236,
+      "endAngleOfMyArc": 5.334424325795415
+},{
+      "startAngleOfMyArc": 5.334424325795415,
+      "endAngleOfMyArc": 5.340707511102594
+},{
+      "startAngleOfMyArc": 5.340707511102594,
+      "endAngleOfMyArc": 5.346990696409773
+},{
+      "startAngleOfMyArc": 5.346990696409773,
+      "endAngleOfMyArc": 5.3532738817169525
+},{
+      "startAngleOfMyArc": 5.3532738817169525,
+      "endAngleOfMyArc": 5.359557067024132
+},{
+      "startAngleOfMyArc": 5.359557067024132,
+      "endAngleOfMyArc": 5.365840252331311
+},{
+      "startAngleOfMyArc": 5.365840252331311,
+      "endAngleOfMyArc": 5.37212343763849
+},{
+      "startAngleOfMyArc": 5.37212343763849,
+      "endAngleOfMyArc": 5.378406622945669
+},{
+      "startAngleOfMyArc": 5.378406622945669,
+      "endAngleOfMyArc": 5.3846898082528485
+},{
+      "startAngleOfMyArc": 5.3846898082528485,
+      "endAngleOfMyArc": 5.390972993560028
+},{
+      "startAngleOfMyArc": 5.390972993560028,
+      "endAngleOfMyArc": 5.397256178867207
+},{
+      "startAngleOfMyArc": 5.397256178867207,
+      "endAngleOfMyArc": 5.403539364174386
+},{
+      "startAngleOfMyArc": 5.403539364174386,
+      "endAngleOfMyArc": 5.409822549481565
+},{
+      "startAngleOfMyArc": 5.409822549481565,
+      "endAngleOfMyArc": 5.4161057347887445
+},{
+      "startAngleOfMyArc": 5.4161057347887445,
+      "endAngleOfMyArc": 5.422388920095924
+},{
+      "startAngleOfMyArc": 5.422388920095924,
+      "endAngleOfMyArc": 5.428672105403103
+},{
+      "startAngleOfMyArc": 5.428672105403103,
+      "endAngleOfMyArc": 5.434955290710282
+},{
+      "startAngleOfMyArc": 5.434955290710282,
+      "endAngleOfMyArc": 5.441238476017461
+},{
+      "startAngleOfMyArc": 5.441238476017461,
+      "endAngleOfMyArc": 5.44752166132464
+},{
+      "startAngleOfMyArc": 5.44752166132464,
+      "endAngleOfMyArc": 5.45380484663182
+},{
+      "startAngleOfMyArc": 5.45380484663182,
+      "endAngleOfMyArc": 5.460088031938999
+},{
+      "startAngleOfMyArc": 5.460088031938999,
+      "endAngleOfMyArc": 5.466371217246178
+},{
+      "startAngleOfMyArc": 5.466371217246178,
+      "endAngleOfMyArc": 5.472654402553357
+},{
+      "startAngleOfMyArc": 5.472654402553357,
+      "endAngleOfMyArc": 5.478937587860536
+},{
+      "startAngleOfMyArc": 5.478937587860536,
+      "endAngleOfMyArc": 5.485220773167716
+},{
+      "startAngleOfMyArc": 5.485220773167716,
+      "endAngleOfMyArc": 5.491503958474895
+},{
+      "startAngleOfMyArc": 5.491503958474895,
+      "endAngleOfMyArc": 5.497787143782074
+},{
+      "startAngleOfMyArc": 5.497787143782074,
+      "endAngleOfMyArc": 5.504070329089253
+},{
+      "startAngleOfMyArc": 5.504070329089253,
+      "endAngleOfMyArc": 5.510353514396432
+},{
+      "startAngleOfMyArc": 5.510353514396432,
+      "endAngleOfMyArc": 5.516636699703612
+},{
+      "startAngleOfMyArc": 5.516636699703612,
+      "endAngleOfMyArc": 5.522919885010791
+},{
+      "startAngleOfMyArc": 5.522919885010791,
+      "endAngleOfMyArc": 5.52920307031797
+},{
+      "startAngleOfMyArc": 5.52920307031797,
+      "endAngleOfMyArc": 5.535486255625149
+},{
+      "startAngleOfMyArc": 5.535486255625149,
+      "endAngleOfMyArc": 5.541769440932328
+},{
+      "startAngleOfMyArc": 5.541769440932328,
+      "endAngleOfMyArc": 5.548052626239508
+},{
+      "startAngleOfMyArc": 5.548052626239508,
+      "endAngleOfMyArc": 5.554335811546687
+},{
+      "startAngleOfMyArc": 5.554335811546687,
+      "endAngleOfMyArc": 5.560618996853866
+},{
+      "startAngleOfMyArc": 5.560618996853866,
+      "endAngleOfMyArc": 5.566902182161045
+},{
+      "startAngleOfMyArc": 5.566902182161045,
+      "endAngleOfMyArc": 5.573185367468224
+},{
+      "startAngleOfMyArc": 5.573185367468224,
+      "endAngleOfMyArc": 5.5794685527754035
+},{
+      "startAngleOfMyArc": 5.5794685527754035,
+      "endAngleOfMyArc": 5.585751738082583
+},{
+      "startAngleOfMyArc": 5.585751738082583,
+      "endAngleOfMyArc": 5.592034923389762
+},{
+      "startAngleOfMyArc": 5.592034923389762,
+      "endAngleOfMyArc": 5.598318108696941
+},{
+      "startAngleOfMyArc": 5.598318108696941,
+      "endAngleOfMyArc": 5.60460129400412
+},{
+      "startAngleOfMyArc": 5.60460129400412,
+      "endAngleOfMyArc": 5.6108844793112995
+},{
+      "startAngleOfMyArc": 5.6108844793112995,
+      "endAngleOfMyArc": 5.617167664618479
+},{
+      "startAngleOfMyArc": 5.617167664618479,
+      "endAngleOfMyArc": 5.623450849925658
+},{
+      "startAngleOfMyArc": 5.623450849925658,
+      "endAngleOfMyArc": 5.629734035232837
+},{
+      "startAngleOfMyArc": 5.629734035232837,
+      "endAngleOfMyArc": 5.636017220540016
+},{
+      "startAngleOfMyArc": 5.636017220540016,
+      "endAngleOfMyArc": 5.6423004058471955
+},{
+      "startAngleOfMyArc": 5.6423004058471955,
+      "endAngleOfMyArc": 5.648583591154375
+},{
+      "startAngleOfMyArc": 5.648583591154375,
+      "endAngleOfMyArc": 5.654866776461554
+},{
+      "startAngleOfMyArc": 5.654866776461554,
+      "endAngleOfMyArc": 5.661149961768733
+},{
+      "startAngleOfMyArc": 5.661149961768733,
+      "endAngleOfMyArc": 5.667433147075912
+},{
+      "startAngleOfMyArc": 5.667433147075912,
+      "endAngleOfMyArc": 5.6737163323830915
+},{
+      "startAngleOfMyArc": 5.6737163323830915,
+      "endAngleOfMyArc": 5.679999517690271
+},{
+      "startAngleOfMyArc": 5.679999517690271,
+      "endAngleOfMyArc": 5.68628270299745
+},{
+      "startAngleOfMyArc": 5.68628270299745,
+      "endAngleOfMyArc": 5.692565888304629
+},{
+      "startAngleOfMyArc": 5.692565888304629,
+      "endAngleOfMyArc": 5.698849073611808
+},{
+      "startAngleOfMyArc": 5.698849073611808,
+      "endAngleOfMyArc": 5.7051322589189875
+},{
+      "startAngleOfMyArc": 5.7051322589189875,
+      "endAngleOfMyArc": 5.711415444226167
+},{
+      "startAngleOfMyArc": 5.711415444226167,
+      "endAngleOfMyArc": 5.717698629533346
+},{
+      "startAngleOfMyArc": 5.717698629533346,
+      "endAngleOfMyArc": 5.723981814840525
+},{
+      "startAngleOfMyArc": 5.723981814840525,
+      "endAngleOfMyArc": 5.730265000147704
+},{
+      "startAngleOfMyArc": 5.730265000147704,
+      "endAngleOfMyArc": 5.736548185454883
+},{
+      "startAngleOfMyArc": 5.736548185454883,
+      "endAngleOfMyArc": 5.742831370762063
+},{
+      "startAngleOfMyArc": 5.742831370762063,
+      "endAngleOfMyArc": 5.749114556069242
+},{
+      "startAngleOfMyArc": 5.749114556069242,
+      "endAngleOfMyArc": 5.755397741376421
+},{
+      "startAngleOfMyArc": 5.755397741376421,
+      "endAngleOfMyArc": 5.7616809266836
+},{
+      "startAngleOfMyArc": 5.7616809266836,
+      "endAngleOfMyArc": 5.767964111990779
+},{
+      "startAngleOfMyArc": 5.767964111990779,
+      "endAngleOfMyArc": 5.774247297297959
+},{
+      "startAngleOfMyArc": 5.774247297297959,
+      "endAngleOfMyArc": 5.780530482605138
+},{
+      "startAngleOfMyArc": 5.780530482605138,
+      "endAngleOfMyArc": 5.786813667912317
+},{
+      "startAngleOfMyArc": 5.786813667912317,
+      "endAngleOfMyArc": 5.793096853219496
+},{
+      "startAngleOfMyArc": 5.793096853219496,
+      "endAngleOfMyArc": 5.799380038526675
+},{
+      "startAngleOfMyArc": 5.799380038526675,
+      "endAngleOfMyArc": 5.805663223833855
+},{
+      "startAngleOfMyArc": 5.805663223833855,
+      "endAngleOfMyArc": 5.811946409141034
+},{
+      "startAngleOfMyArc": 5.811946409141034,
+      "endAngleOfMyArc": 5.818229594448213
+},{
+      "startAngleOfMyArc": 5.818229594448213,
+      "endAngleOfMyArc": 5.824512779755392
+},{
+      "startAngleOfMyArc": 5.824512779755392,
+      "endAngleOfMyArc": 5.830795965062571
+},{
+      "startAngleOfMyArc": 5.830795965062571,
+      "endAngleOfMyArc": 5.837079150369751
+},{
+      "startAngleOfMyArc": 5.837079150369751,
+      "endAngleOfMyArc": 5.84336233567693
+},{
+      "startAngleOfMyArc": 5.84336233567693,
+      "endAngleOfMyArc": 5.849645520984109
+},{
+      "startAngleOfMyArc": 5.849645520984109,
+      "endAngleOfMyArc": 5.855928706291288
+},{
+      "startAngleOfMyArc": 5.855928706291288,
+      "endAngleOfMyArc": 5.862211891598467
+},{
+      "startAngleOfMyArc": 5.862211891598467,
+      "endAngleOfMyArc": 5.8684950769056465
+},{
+      "startAngleOfMyArc": 5.8684950769056465,
+      "endAngleOfMyArc": 5.874778262212826
+},{
+      "startAngleOfMyArc": 5.874778262212826,
+      "endAngleOfMyArc": 5.881061447520005
+},{
+      "startAngleOfMyArc": 5.881061447520005,
+      "endAngleOfMyArc": 5.887344632827184
+},{
+      "startAngleOfMyArc": 5.887344632827184,
+      "endAngleOfMyArc": 5.893627818134363
+},{
+      "startAngleOfMyArc": 5.893627818134363,
+      "endAngleOfMyArc": 5.8999110034415425
+},{
+      "startAngleOfMyArc": 5.8999110034415425,
+      "endAngleOfMyArc": 5.906194188748722
+},{
+      "startAngleOfMyArc": 5.906194188748722,
+      "endAngleOfMyArc": 5.912477374055901
+},{
+      "startAngleOfMyArc": 5.912477374055901,
+      "endAngleOfMyArc": 5.91876055936308
+},{
+      "startAngleOfMyArc": 5.91876055936308,
+      "endAngleOfMyArc": 5.925043744670259
+},{
+      "startAngleOfMyArc": 5.925043744670259,
+      "endAngleOfMyArc": 5.9313269299774385
+},{
+      "startAngleOfMyArc": 5.9313269299774385,
+      "endAngleOfMyArc": 5.937610115284618
+},{
+      "startAngleOfMyArc": 5.937610115284618,
+      "endAngleOfMyArc": 5.943893300591797
+},{
+      "startAngleOfMyArc": 5.943893300591797,
+      "endAngleOfMyArc": 5.950176485898976
+},{
+      "startAngleOfMyArc": 5.950176485898976,
+      "endAngleOfMyArc": 5.956459671206155
+},{
+      "startAngleOfMyArc": 5.956459671206155,
+      "endAngleOfMyArc": 5.9627428565133345
+},{
+      "startAngleOfMyArc": 5.9627428565133345,
+      "endAngleOfMyArc": 5.969026041820514
+},{
+      "startAngleOfMyArc": 5.969026041820514,
+      "endAngleOfMyArc": 5.975309227127693
+},{
+      "startAngleOfMyArc": 5.975309227127693,
+      "endAngleOfMyArc": 5.981592412434872
+},{
+      "startAngleOfMyArc": 5.981592412434872,
+      "endAngleOfMyArc": 5.987875597742051
+},{
+      "startAngleOfMyArc": 5.987875597742051,
+      "endAngleOfMyArc": 5.99415878304923
+},{
+      "startAngleOfMyArc": 5.99415878304923,
+      "endAngleOfMyArc": 6.00044196835641
+},{
+      "startAngleOfMyArc": 6.00044196835641,
+      "endAngleOfMyArc": 6.006725153663589
+},{
+      "startAngleOfMyArc": 6.006725153663589,
+      "endAngleOfMyArc": 6.013008338970768
+},{
+      "startAngleOfMyArc": 6.013008338970768,
+      "endAngleOfMyArc": 6.019291524277947
+},{
+      "startAngleOfMyArc": 6.019291524277947,
+      "endAngleOfMyArc": 6.025574709585126
+},{
+      "startAngleOfMyArc": 6.025574709585126,
+      "endAngleOfMyArc": 6.031857894892306
+},{
+      "startAngleOfMyArc": 6.031857894892306,
+      "endAngleOfMyArc": 6.038141080199485
+},{
+      "startAngleOfMyArc": 6.038141080199485,
+      "endAngleOfMyArc": 6.044424265506664
+},{
+      "startAngleOfMyArc": 6.044424265506664,
+      "endAngleOfMyArc": 6.050707450813843
+},{
+      "startAngleOfMyArc": 6.050707450813843,
+      "endAngleOfMyArc": 6.056990636121022
+},{
+      "startAngleOfMyArc": 6.056990636121022,
+      "endAngleOfMyArc": 6.063273821428202
+},{
+      "startAngleOfMyArc": 6.063273821428202,
+      "endAngleOfMyArc": 6.069557006735381
+},{
+      "startAngleOfMyArc": 6.069557006735381,
+      "endAngleOfMyArc": 6.07584019204256
+},{
+      "startAngleOfMyArc": 6.07584019204256,
+      "endAngleOfMyArc": 6.082123377349739
+},{
+      "startAngleOfMyArc": 6.082123377349739,
+      "endAngleOfMyArc": 6.088406562656918
+},{
+      "startAngleOfMyArc": 6.088406562656918,
+      "endAngleOfMyArc": 6.094689747964098
+},{
+      "startAngleOfMyArc": 6.094689747964098,
+      "endAngleOfMyArc": 6.100972933271277
+},{
+      "startAngleOfMyArc": 6.100972933271277,
+      "endAngleOfMyArc": 6.107256118578456
+},{
+      "startAngleOfMyArc": 6.107256118578456,
+      "endAngleOfMyArc": 6.113539303885635
+},{
+      "startAngleOfMyArc": 6.113539303885635,
+      "endAngleOfMyArc": 6.119822489192814
+},{
+      "startAngleOfMyArc": 6.119822489192814,
+      "endAngleOfMyArc": 6.1261056744999935
+},{
+      "startAngleOfMyArc": 6.1261056744999935,
+      "endAngleOfMyArc": 6.132388859807173
+},{
+      "startAngleOfMyArc": 6.132388859807173,
+      "endAngleOfMyArc": 6.138672045114352
+},{
+      "startAngleOfMyArc": 6.138672045114352,
+      "endAngleOfMyArc": 6.144955230421531
+},{
+      "startAngleOfMyArc": 6.144955230421531,
+      "endAngleOfMyArc": 6.15123841572871
+},{
+      "startAngleOfMyArc": 6.15123841572871,
+      "endAngleOfMyArc": 6.1575216010358895
+},{
+      "startAngleOfMyArc": 6.1575216010358895,
+      "endAngleOfMyArc": 6.163804786343069
+},{
+      "startAngleOfMyArc": 6.163804786343069,
+      "endAngleOfMyArc": 6.170087971650248
+},{
+      "startAngleOfMyArc": 6.170087971650248,
+      "endAngleOfMyArc": 6.176371156957427
+},{
+      "startAngleOfMyArc": 6.176371156957427,
+      "endAngleOfMyArc": 6.182654342264606
+},{
+      "startAngleOfMyArc": 6.182654342264606,
+      "endAngleOfMyArc": 6.1889375275717855
+},{
+      "startAngleOfMyArc": 6.1889375275717855,
+      "endAngleOfMyArc": 6.195220712878965
+},{
+      "startAngleOfMyArc": 6.195220712878965,
+      "endAngleOfMyArc": 6.201503898186144
+},{
+      "startAngleOfMyArc": 6.201503898186144,
+      "endAngleOfMyArc": 6.207787083493323
+},{
+      "startAngleOfMyArc": 6.207787083493323,
+      "endAngleOfMyArc": 6.214070268800502
+},{
+      "startAngleOfMyArc": 6.214070268800502,
+      "endAngleOfMyArc": 6.2203534541076815
+},{
+      "startAngleOfMyArc": 6.2203534541076815,
+      "endAngleOfMyArc": 6.226636639414861
+},{
+      "startAngleOfMyArc": 6.226636639414861,
+      "endAngleOfMyArc": 6.23291982472204
+},{
+      "startAngleOfMyArc": 6.23291982472204,
+      "endAngleOfMyArc": 6.239203010029219
+},{
+      "startAngleOfMyArc": 6.239203010029219,
+      "endAngleOfMyArc": 6.245486195336398
+},{
+      "startAngleOfMyArc": 6.245486195336398,
+      "endAngleOfMyArc": 6.2517693806435775
+},{
+      "startAngleOfMyArc": 6.2517693806435775,
+      "endAngleOfMyArc": 6.258052565950757
+},{
+      "startAngleOfMyArc": 6.258052565950757,
+      "endAngleOfMyArc": 6.264335751257936
+},{
+      "startAngleOfMyArc": 6.264335751257936,
+      "endAngleOfMyArc": 6.270618936565115
+},{
+      "startAngleOfMyArc": 6.270618936565115,
+      "endAngleOfMyArc": 6.276902121872294
+},{
+      "startAngleOfMyArc": 6.276902121872294,
+      "endAngleOfMyArc": 6.283185307179473
+}
+];
+
+// Create a path element and set its d attribute
+    var data = d3.select('g')
+            .selectAll('path')
+            .data(arcData);
+
+    data.enter()
+        .append('path')
+        .attr('d', arcGenerator_fcn(90, 100, 
+            d => d.startAngleOfMyArc,
+            d => d.endAngleOfMyArc)
+        );
+
+    // Create and append the second outer arc in black
+    // data.enter()
+    //     .append('g')
+    //     .append('path')
+    //     .style('fill', "black")
+    //     .attr('d', 
+    //     arcGenerator_fcn(
+    //         105, 
+    //         d => getRandomIntInclusive(1, 5)*2 + 105,
+    //         d => d.startAngleOfMyArc, 
+    //         d => d.endAngleOfMyArc)
+    //     );
+
+    for (let i = 1; i < 15; i++) {
+        // Create and append the multiple outer arcs
+        let inner_rad = 105 + 10*i + 5*i 
+        data.enter()
+            .append('g')
+            .append('path')
+            .style('fill', myColor(i))
+            .attr('d', 
+            arcGenerator_fcn(
+                inner_rad, 
+                d => getRandomIntInclusive(1, 5)*2 + inner_rad,
+                d => d.startAngleOfMyArc, 
+                d => d.endAngleOfMyArc)
+            );        
+    }
+  </script>
+</body>
+</html>
