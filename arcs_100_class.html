@@ -23,6 +23,14 @@ path {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
   <script>
 
+  color = ['e5be9e','b2945b','cbc0ad','86a397','361d2e','1a090d',
+           '348aa7', '8de969' ,'443850', '984447' ,'a5668b','6cd4ff','087e8b','d0b8ac','ebebeb']
+
+  // Option 1: give 2 color names
+  // source https://www.d3-graph-gallery.com/graph/custom_color.html
+var myColor = d3.scaleLinear().domain([1,20]).range(["black", "blue"])
+
+
 // Random number generator from MDN Mozilla tutorial on JS
 // URL : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random  
     function getRandomIntInclusive(min, max) {
@@ -463,25 +471,25 @@ path {
         );
 
     // Create and append the second outer arc in black
-    data.enter()
-        .append('g')
-        .append('path')
-        .style('fill', "black")
-        .attr('d', 
-        arcGenerator_fcn(
-            105, 
-            d => getRandomIntInclusive(1, 5)*2 + 105,
-            d => d.startAngleOfMyArc, 
-            d => d.endAngleOfMyArc)
-        );
+    // data.enter()
+    //     .append('g')
+    //     .append('path')
+    //     .style('fill', "black")
+    //     .attr('d', 
+    //     arcGenerator_fcn(
+    //         105, 
+    //         d => getRandomIntInclusive(1, 5)*2 + 105,
+    //         d => d.startAngleOfMyArc, 
+    //         d => d.endAngleOfMyArc)
+    //     );
 
-    for (let i = 1; i < 6; i++) {
+    for (let i = 1; i < 15; i++) {
         // Create and append the multiple outer arcs
         let inner_rad = 105 + 10*i + 5*i 
         data.enter()
             .append('g')
             .append('path')
-            .style('fill', "black")
+            .style('fill', myColor(i))
             .attr('d', 
             arcGenerator_fcn(
                 inner_rad, 
