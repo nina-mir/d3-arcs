@@ -1,7 +1,8 @@
 # d3-arcs
 
-Simple program to create 2 concentric arcs with differring thickness (aka outer radius)
-Upon refreshing the HTML page in your browser, you will see different outer arc with varying radii
+Simple program to create multiple concentric arcs with differring thickness (aka outer radius).
+Upon refreshing the HTML page in your browser, you will see different outer arc with varying radii.
+note: The demo gif of arcs_functional.html file. 
 
 ## sources: 
 [original example source](https://bl.ocks.org/d3indepth/3d912bbaaebcf01a05b75d088a1c9976)
