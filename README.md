@@ -15,7 +15,7 @@ note: The demo gif of arcs_functional.html file.
 
 ## sample output 
 
-![Demo](assets/demo.gif)
+![Demo](assets/1000_classes.png)
 
 
 
