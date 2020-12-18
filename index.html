@@ -40,6 +40,7 @@ var colorScale_2 = d3.schemeCategory20;
 var colorScale_3 = d3.schemeCategory20b;
 var colorScale_4 = d3.schemeCategory20c;
 
+var low_arc_index = 2, high_arc_index = 22;
 
 var loaded = data;
 
@@ -69,7 +70,7 @@ if (n>0) {
 
 var basis = d3.select('#demo1').select('#main').datum(loaded);
 
-for (let i = 5; i < 25; i++) {
+for (let i = low_arc_index ; i < high_arc_index; i++) {
 // Create and append the multiple outer arcs
 basis.append('g')
   .append('path')
@@ -105,7 +106,7 @@ var valueline = d3.lineRadial()
 my_data = d3.select('#demo1').select('#main').datum(data)
 
 
-for (let i = 5; i < 25; i++) {
+for (let i = low_arc_index ; i < high_arc_index; i++) {
 // Create and append the multiple outer arcs
 my_data.append('g')
     .append('path')
