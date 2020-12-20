@@ -20,7 +20,7 @@
     </svg>
   </div>
   <div class="col-2 ">
-    <p> 20 arcs | Radii distrbution (px): 140, 160, ..., 520. </p>
+    <p> 20 arcs | Radii distrbution (px): 140, 160, ..., 52. </p>
     <button onclick="add_circles(-100)"> lower arcs </button>
     <button onclick="add_circles(100)"> upper arcs </button>
   </div>
@@ -33,6 +33,16 @@
 
 
 <script>
+
+// Random number generator from MDN Mozilla tutorial on JS
+// URL : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random  
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive 
+}
+
+color_array = [	'red', 'blue', 	'gray' , 'brown', 	'black' ];
 
 // var c20 = d3.scale.category20b();
 var colorScale_1 = d3.schemeCategory10;
@@ -118,7 +128,7 @@ my_data.append('g')
         .curve(d3.curveCatmullRom)
     )
     .attr("fill", "none")
-    .attr("stroke", colorScale_4[i-5]); 
+    .attr("stroke",  color_array[getRandomIntInclusive(0, 4)]); 
     // .attr("transform", "translate(600, 600)");        
 }
 
